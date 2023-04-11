@@ -8,7 +8,7 @@ class Information:
     CatchmentDescr = None
 
     # AREA DISTRIBUTION FACOTRS
-    Size = 0.00
+    Area = 0.00
     RuralPerc = 0.00
     UrbanPerc = 0.00
     LakePerc = 0.00
