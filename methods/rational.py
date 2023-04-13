@@ -1,11 +1,15 @@
 
 # OUTPUT VARIABLES
+import math
+
+import numpy
+
 C1 = 0.00
 C2 = 0.00
 TC = 0.00
-TC1 = 0.00
-TC2 = 0.00
-TC3 = 0.00
+#TC1 = 0.00
+#TC2 = 0.00
+#TC3 = 0.00
 C1D = 0.00
 FT = 0.00
 C1T = 0.00
@@ -25,7 +29,7 @@ CatchmentDesc = None
 # PHYSICAL CATCHMENT CHARACTERISTICS
 RainfallRegion = None
 MAP = 518
-Area = 0.00
+Area = 6331
 OFD = 0.00 # Lo
 OFHD = 0.00 # H
 AOS = 0.00 # So
@@ -47,6 +51,52 @@ CanalLength = 0.00
 ActualVelocityC = 0.00
 MaxVelocity = 0.00
 
+# -- RURAL RUNOFF VARIABLES --
+#AVERAGE CATCHMENT SLOPE VARIABLE
+VleisAndPans = 57.6
+FlatAreas = 34.3
+Hilly = 6.7
+SteepAreas = 1.4
+
+# PERMEABILITY VARIABLES
+A = 0.00
+AB = 23.15
+B = 27.31
+BC = 2.82
+C = 0.00
+CD = 15.69
+D = 31.03
+
+# LAND USE/VEGETATION
+ThickBush_Plantations = 4.34
+LightBush_Farmlands = 0.73
+Grasslands = 80.18
+Cultivatedland_Contoured = 0.00
+Cultivatedland = 14.29
+NoVegetation = 0.46
+
+# -- URBAN RUNOFF VARIABLES --
+# LAWNS
+SandyFlat = 0.00
+SandySteep = 0.00
+HeavySoilFlat = 0.00
+HeavySoilSteep = 0.00
+
+# RESIDENTIAL AREAS
+Houses = 59.12
+Flats = 0.14
+
+# INDUSTRY
+LightIndustry = 11.53
+AverageIndustry = 0.00
+HeavyIndustry = 0.03
+
+# BUSINESSES
+CityCentre = 4.63
+Suburban = 24.55
+Streets = 0.00
+MaximumFlood = 0.00
+
 def RuralRunoffCoefficient():
 
     # MAIN COEFFICIENTS
@@ -55,24 +105,12 @@ def RuralRunoffCoefficient():
     CY = 0.00
 
     #AVERAGE CATCHMENT SLOPE VARIABLE
-    VleisAndPans = 57.6
-    FlatAreas = 34.3
-    Hilly = 6.7
-    SteepAreas = 1.4
-
     FactorVP = 0.00
     FactorFA = 0.00
     FactorH = 0.00
     FactorSA = 0.00
 
     # PERMEABILITY VARIABLES
-    A = 0.00
-    AB = 23.15
-    B = 27.31
-    BC = 2.82
-    C = 0.00
-    CD = 15.69
-    D = 31.03
     A_Factor = 0.00
     AB_Factor = 0.00
     B_Factor = 0.00
@@ -82,12 +120,6 @@ def RuralRunoffCoefficient():
     D_Factor = 0.00
 
     # LAND USE/VEGETATION
-    ThickBush_Plantations = 4.34
-    LightBush_Farmlands = 0.73
-    Grasslands = 80.18
-    Cultivatedland_Contoured = 0.00
-    Cultivatedland = 14.29
-    NoVegetation = 0.46
     ThickBush_Plantations_Factor = 0.00
     LightBush_Farmlands_Factor = 0.00
     Grasslands_Factor = 0.00
@@ -287,16 +319,9 @@ def RuralRunoffCoefficient():
 
     CV = CV1 + CV2 + CV3 + CV4 + CV5 + CV6
 
-    # ----- TOTAL C1 CALCULATION -----
-    print("CP: " + str(CP))
-    print("CD: " + str(CS))
-    print("CV: " + str(CV))
-    print("C1: " + str(C1))
-
     return (CP + CS + CV)
 
-
-def UrbanRunoffCoefficients(self):
+def UrbanRunoffCoefficients():
 
     # OUTPUT VARIABLES
     CL = 0.00
@@ -305,34 +330,157 @@ def UrbanRunoffCoefficients(self):
     CB = 0.00
 
     # LAWNS
-    SandyFlat = 0.00
-    SandySteep = 0.00
-    HeavySoilFlat = 0.00
-    HeavySoilSteep = 0.00
+    FactorSF = 0.1
+    FactorSS = 0.2
+    FactorHSF = 0.17
+    FactorHSS = 0.35
 
     # RESIDENTIAL AREAS
-    Houses = 0.00
-    Flats = 0.00
+    Houses_Factor = 0.5
+    Flats_Factor = 0.7
 
     # INDUSTRY
-    LightIndustry = 0.00
-    AverageIndustry = 0.00
-    HeavyIndustry = 0.00
+    FactorLI = 0.8
+    FactorAI = 0.85
+    FactorHI = 0.9
 
     # BUSINESSES
-    CityCentre = 0.00
-    Suburban = 0.00
-    Streets = 0.00
-    MaximumFlood = 0.00
+    FactorCC = 0.95
+    FactorSurb = 0.7
+    FactorStreets = 0.95
+    FactorMF = 1
 
-def WheightedRunoffCoefficients(self):
+    # ----- CL CALCULATION -----
+    CL1 = 0.00
+    CL2 = 0.00
+    CL3 = 0.00
+    CL4 = 0.00
+
+    if SandyFlat == 0.00:
+        CL1 = 0.00
+    else:
+        CL1 = (SandyFlat / 100) * FactorSF
+
+    if SandySteep == 0.00:
+        CL2 = 0.00
+    else:
+        CL2 = (SandySteep / 100) * FactorSS
+
+    if HeavySoilFlat == 0.00:
+        CL3 = 0.00
+    else:
+        CL3 = (HeavySoilFlat / 100) * FactorHSF
+
+    if HeavySoilSteep == 0.00:
+        CL4 = 0.00
+    else:
+        CL4 = (HeavySoilSteep / 100) * FactorHSS
+
+    CL = CL1 + CL2 + CL3 + CL4
+
+    # ----- CR CALCULATIONS -----
+    CR1 = 0.00
+    CR2 = 0.00
+
+    if Houses == 0.00:
+        CR1 = 0.00
+    else:
+        CR1 = (Houses / 100) * Houses_Factor
+
+    if Flats == 0.00:
+        CR2 = 0.00
+    else:
+        CR2 = (Flats / 100) * Flats_Factor
+
+    CR = CR1 + CR2
+
+    # ----- CI CALCULATIONS -----
+    CI1 = 0.00
+    CI2 = 0.00
+    CI3 = 0.00
+
+    if LightIndustry == 0.00:
+        CI1 = 0.00
+    else:
+        CI1 = (LightIndustry / 100) * FactorLI
+
+    if AverageIndustry == 0.00:
+        CI2 = 0.00
+    else:
+        CI2 = (AverageIndustry / 100) * FactorAI
+
+    if HeavyIndustry == 0.00:
+        CI3 = 0.00
+    else:
+        CI3 = (HeavyIndustry / 100) * FactorHI
+
+    CI = CI1 + CI2 + CI3
+
+    # ----- CB CCALCULATIONS -----
+    CB1 = 0.00
+    CB2 = 0.00
+    CB3 = 0.00
+    CB4 = 0.00
+
+    if CityCentre == 0.00:
+        CB1 = 0.00
+    else:
+        CB1 = (CityCentre / 100) * FactorCC
+
+    if Suburban == 0.00:
+        CB2 = 0.00
+    else:
+        CB2 = (Suburban / 100) * FactorSurb
+
+    if Streets == 0.00:
+        CB3 = 0.00
+    else:
+        CB3 = (Streets / 100) * FactorStreets
+
+    if MaximumFlood == 0.00:
+        CB4 = 0.00
+    else:
+        CB4 = (MaximumFlood / 100) * FactorMF
+
+    CB = CB1 + CB2 + CB3 + CB4
+
+    return (CL + CR + CI + CB)
+
+def TimeOfConcentration():
+    tau = 0.00
+    TC1 = 0.00
+    TC2 = 0.00
+    TC3 = 0.00
+
+    # ----- CORRECTION FACTOR CALCULATION -----
+    if Area < 1:
+        tau = 2
+    elif Area >= 1 and Area <= 100:
+        tau = 2 - (0.5 * numpy.log10(Area))
+    elif Area >= 100 and Area <= 5000:
+        tau = 1
+    elif Area >= 5000 and Area <= 100000:
+        tau = 2.42 - (0.385 * numpy.log10(Area))
+    elif Area > 100000:
+        tau = 0.5
+    else:
+        tau = 0.00
+
+    # ----- TC1 CALCULATION -----
+    #print(tau)
+
+
+
+def WheightedRunoffCoefficients():
     temp = 1
 
-def DesignRainfallInformation(self):
+def DesignRainfallInformation(slf):
     temp = 1
 
 if __name__ == '__main__':
-    print(RuralRunoffCoefficient())
+    print("C1: " + str(RuralRunoffCoefficient()))
+    print("C2: " + str(UrbanRunoffCoefficients()))
+    TimeOfConcentration()
 
 
 
