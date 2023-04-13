@@ -17,11 +17,12 @@ class Information:
     # DESIGN RAINFALL INFORMATION
     SRT = False
     MRT = False
-    RLM_SI_DR = 0.00
+    RLM_SI_DR = False
+    MAP = 0.00
 
     # CATCHMENT CLASSIFICATION
-    SummerRain = False
-    WinterRain = False
+    InlandSummerRain = False
+    CoastalWinterRain = False
     FlatPermeable = False
     SteepImpermeable = False
 
