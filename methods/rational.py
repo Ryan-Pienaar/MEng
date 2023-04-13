@@ -1,9 +1,7 @@
-
-# OUTPUT VARIABLES
 import math
-
 import numpy
 
+# OUTPUT VARIABLES
 C1 = 0.00
 C2 = 0.00
 TC = 0.00
@@ -34,14 +32,15 @@ OFD = 0.00 # Lo
 OFHD = 0.00 # H
 AOS = 0.00 # So
 OFS = 0.00 # r-value
-LMW = 0.00 # Lch
-ACS = 0.00 # Sch
+LMW = 186.696 # Lch
+ACS = 0.00131 # Sch
 # -- AREA DISTRIBUTION FACTORS --
 RuralPerc = 0.00
 UrbanPerc = 0.00
 LakesPerc = 0.00
 DolomitePerc = 0.00
 # -- ARTIFICIAL FLOW --
+UseArtifical = False
 # -- STREET FLOW --
 FlowPathLength = 0.00
 Slope = 0.00
@@ -448,6 +447,7 @@ def UrbanRunoffCoefficients():
 
 def TimeOfConcentration():
     tau = 0.00
+    UseCorrectionFactor = False
     TC1 = 0.00
     TC2 = 0.00
     TC3 = 0.00
@@ -467,9 +467,33 @@ def TimeOfConcentration():
         tau = 0.00
 
     # ----- TC1 CALCULATION -----
+    if OFD == 0:
+        TC1 = 0
+    else:
+        TC1 = 0.604 * (math.pow((OFS * OFD) / (math.pow(AOS, 0.5)), 0.467))
+
+    # ----- TC2 CALCULATION -----
+    if ACS == 0:
+        TC2 = 0
+    elif UseCorrectionFactor:
+        TC2 = tau * math.pow(((0.87 * math.pow(LMW, 2)) / (1000 * ACS)), 0.385)
+    elif not UseCorrectionFactor:
+        TC2 = math.pow(((0.87 * math.pow(LMW, 2)) / (1000 * ACS)), 0.385)
+
+    # ----- TC3 CALCULATIONS -----
+    if not UseArtifical:
+        TC3 = 0
+    elif FlowPathLength == 0:
+        TC3 = (CanalLength / ActualVelocityC) / 3.6
+    elif CanalLength == 0:
+        TC3 = (FlowPathLength / ActualVelocityS) / 3.6
+    else:
+        TC3 = ((CanalLength / ActualVelocityC) / 3.6) + ((FlowPathLength / ActualVelocityS) / 3.6)
+
+    return (TC1 + TC2 + TC3)
+
+
     #print(tau)
-
-
 
 def WheightedRunoffCoefficients():
     temp = 1
@@ -480,7 +504,7 @@ def DesignRainfallInformation(slf):
 if __name__ == '__main__':
     print("C1: " + str(RuralRunoffCoefficient()))
     print("C2: " + str(UrbanRunoffCoefficients()))
-    TimeOfConcentration()
+    print("TC: " + str(TimeOfConcentration()))
 
 
 
