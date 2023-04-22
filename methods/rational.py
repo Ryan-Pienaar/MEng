@@ -1,5 +1,6 @@
 import math
 import numpy
+from array import *
 
 # OUTPUT VARIABLES
 C1 = 0.00
@@ -8,10 +9,13 @@ TC = 0.00
 #TC1 = 0.00
 #TC2 = 0.00
 #TC3 = 0.00
-C1D = 0.00
-FT = 0.00
-C1T = 0.00
-CT = 0.00
+CT2 = 0.00
+CT5 = 0.00
+CT10 = 0.00
+CT20 = 0.00
+CT50 = 0.00
+CT100 = 0.00
+CT200  = 0.00
 PT_MP = 0.00
 PT_RLMA_SI = 0.00
 IT = 0.00
@@ -23,6 +27,9 @@ SDRN = None
 TDRN = None
 QSDRN = None
 CatchmentDesc = None
+FlatPermiable = True
+SteepImpermiable = False
+
 
 # PHYSICAL CATCHMENT CHARACTERISTICS
 RainfallRegion = None
@@ -35,9 +42,9 @@ OFS = 0.00 # r-value
 LMW = 186.696 # Lch
 ACS = 0.00131 # Sch
 # -- AREA DISTRIBUTION FACTORS --
-RuralPerc = 0.00
-UrbanPerc = 0.00
-LakesPerc = 0.00
+RuralPerc = 96.62
+UrbanPerc = 3.04
+LakesPerc = 0.34
 DolomitePerc = 0.00
 # -- ARTIFICIAL FLOW --
 UseArtifical = False
@@ -495,16 +502,66 @@ def TimeOfConcentration():
 
     #print(tau)
 
-def WheightedRunoffCoefficients():
-    temp = 1
+def WheightedRunoffCoefficients(C1, C2):
+    T2 = 0
+    T5 = 1
+    T10 = 2
+    T20 = 3
+    T50 = 4
+    T100 = 5
+    T200 = 6
+    RRC = 0
+    DRRC = 1
+    AdjustmentFactor = 2
+    AdjustedRRC = 3
+    WRC = 4
+
+    arr = numpy.zeros((5,7))
+
+    if FlatPermiable:
+        arr[2][0] = 0.5
+        arr[2][1] = 0.55
+        arr[2][2] = 0.6
+        arr[2][3] = 0.67
+        arr[2][4] = 0.83
+        arr[2][5] = 1
+        arr[2][6] = 1.2
+    elif SteepImpermiable:
+        arr[2][0] = 0.75
+        arr[2][1] = 0.8
+        arr[2][2] = 0.85
+        arr[2][3] = 0.9
+        arr[2][4] = 0.95
+        arr[2][5] = 1
+        arr[2][6] = 1.2
+    
+    for i in range(7):
+        arr[0][i] = C1
+        arr[1][i] = (C1 * (1 - DolomitePerc/100) + (C1 * SteepAreas / 100) * ((VleisAndPans/100*0.1) + (FlatAreas/100*0.2) + (Hilly/100*0.35) + (SteepAreas/100*0.5)))
+        arr[3][i] = arr[1][i] * arr[2][i]
+        arr[4][i] = RuralPerc/100*arr[3][i] + UrbanPerc/100*C2 + LakesPerc/100*0
+        print(RuralPerc/100*arr[3][i] + UrbanPerc/100*C2 + LakesPerc/100*0)
+    
+
+    return arr[4][0], arr[4][1], arr[4][2], arr[4][3], arr[4][4], arr[4][5], arr[4][6]
+
+
+    
+
 
 def DesignRainfallInformation(slf):
     temp = 1
 
 if __name__ == '__main__':
-    print("C1: " + str(RuralRunoffCoefficient()))
-    print("C2: " + str(UrbanRunoffCoefficients()))
-    print("TC: " + str(TimeOfConcentration()))
+    C1 = RuralRunoffCoefficient()
+    C2 = UrbanRunoffCoefficients()
+    TC = TimeOfConcentration()
+    CT2, CT5, CT10, CT20, CT50, CT100, CT200 = WheightedRunoffCoefficients(C1, C2)
+    print("C1: " + str(C1))
+    print("C2: " + str(C2))
+    print("TC: " + str(TC))
+    
+    
 
 
 
