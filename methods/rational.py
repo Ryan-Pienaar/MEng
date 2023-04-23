@@ -29,7 +29,10 @@ QSDRN = None
 CatchmentDesc = None
 FlatPermiable = True
 SteepImpermiable = False
-
+SingleRainfallStation = False
+MultipleRainfallStations = True
+InlandSummer = True
+CoastalWinter = False
 
 # PHYSICAL CATCHMENT CHARACTERISTICS
 RainfallRegion = None
@@ -540,26 +543,38 @@ def WheightedRunoffCoefficients(C1, C2):
         arr[1][i] = (C1 * (1 - DolomitePerc/100) + (C1 * SteepAreas / 100) * ((VleisAndPans/100*0.1) + (FlatAreas/100*0.2) + (Hilly/100*0.35) + (SteepAreas/100*0.5)))
         arr[3][i] = arr[1][i] * arr[2][i]
         arr[4][i] = RuralPerc/100*arr[3][i] + UrbanPerc/100*C2 + LakesPerc/100*0
-        print(RuralPerc/100*arr[3][i] + UrbanPerc/100*C2 + LakesPerc/100*0)
+
+    return arr
+
+def DesignRainfallInformation(TC, wrc_arr):
+    arr = numpy.zeros((5,7))
+    var = [0.47, 0.64, 0.81, 1, 1.3, 1.6, 1.8]
+    QT = 0
+
+    for i in range(7):
+        if SingleRainfallStation or MultipleRainfallStations:
+            if TC == 0:
+                arr[0][i] = 0
+            elif InlandSummer:
+                arr[0][i] = TC * (217.8/math.pow((1 + 4.164 * TC), 0.8832)) * var[i] * ((18.79 + 0.17*MAP)/100)
+            else:
+                arr[0][i] = TC * (122.8/math.pow((1 + 4.779 * TC), 0.7372)) * var[i] * ((18.79 + 0.17*MAP)/100)
+        else:
+            arr[0][i] = 0
+
+    print(arr)
     
-
-    return arr[4][0], arr[4][1], arr[4][2], arr[4][3], arr[4][4], arr[4][5], arr[4][6]
-
-
-    
-
-
-def DesignRainfallInformation(slf):
-    temp = 1
 
 if __name__ == '__main__':
     C1 = RuralRunoffCoefficient()
     C2 = UrbanRunoffCoefficients()
     TC = TimeOfConcentration()
-    CT2, CT5, CT10, CT20, CT50, CT100, CT200 = WheightedRunoffCoefficients(C1, C2)
+    WRC_ARR = WheightedRunoffCoefficients(C1, C2)
+    #CT2, CT5, CT10, CT20, CT50, CT100, CT200 = WheightedRunoffCoefficients(C1, C2)
     print("C1: " + str(C1))
     print("C2: " + str(C2))
     print("TC: " + str(TC))
+    DesignRainfallInformation(TC, WRC_ARR)
     
     
 
