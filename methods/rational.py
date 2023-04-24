@@ -1,6 +1,9 @@
 import math
 import numpy
 from array import *
+import grid_rainfall as gr
+import importlib
+importlib.reload(gr)
 
 # OUTPUT VARIABLES
 C1 = 0.00
@@ -550,6 +553,8 @@ def DesignRainfallInformation(TC, wrc_arr):
     arr = numpy.zeros((5,7))
     var = [0.47, 0.64, 0.81, 1, 1.3, 1.6, 1.8]
     QT = 0
+    rounded_tc = round(TC * 8) / 8
+    rainfall_grid = gr.readfile()
 
     for i in range(7):
         if SingleRainfallStation or MultipleRainfallStations:
@@ -561,20 +566,61 @@ def DesignRainfallInformation(TC, wrc_arr):
                 arr[0][i] = TC * (122.8/math.pow((1 + 4.779 * TC), 0.7372)) * var[i] * ((18.79 + 0.17*MAP)/100)
         else:
             arr[0][i] = 0
+        
+        arr[1][i] = 0 #gr.lookup(47.875, i+1, rainfall_grid)
 
-    print(arr)
+        if TC == 0:
+            arr[2][i] = 0
+        elif arr[1][i] == 0:
+            arr[2][i] = arr[0][i] / TC
+        elif arr[1][i] != 0:
+            arr[2][i] = arr[1][i] / TC
+        
+        if Area == 0:
+            arr[3][i] = 0
+        elif Area <= 10 and TC > 1:
+            arr[3][i] = 100
+        else:
+            arr[3][i] = math.pow((90000 - 12800 * math.log(Area) + 9830 * math.log(TC * 60)), 0.4)
+
+        if arr[2][i] == 0:
+            arr[4][i] == 0
+        elif Area <= 10 and TC > 10:
+            arr[4][i] = arr[2][i]
+        elif ARF == 0:
+            print(arr[2][i])
+            arr[4][i] = (arr[3][i] / 100) * arr[2][i]
+        else:
+            arr[4][i] = (ARF / 100) * arr[2][i]
+
+    return arr
     
+def PeakFlow(wrc_arr, dri_arr):
+    arr = numpy.zeros(7)
+
+    for i in range(7):
+        if dri_arr[4][i] == 0:
+            arr[i] = 0
+        else:
+            arr[i] = wrc_arr[4][i] * dri_arr[4][i] * Area / 3.6
+
+    return arr
 
 if __name__ == '__main__':
     C1 = RuralRunoffCoefficient()
     C2 = UrbanRunoffCoefficients()
     TC = TimeOfConcentration()
     WRC_ARR = WheightedRunoffCoefficients(C1, C2)
+    DRI_ARR = DesignRainfallInformation(TC, WRC_ARR)
+    PF_ARR = PeakFlow(WRC_ARR, DRI_ARR)
     #CT2, CT5, CT10, CT20, CT50, CT100, CT200 = WheightedRunoffCoefficients(C1, C2)
     print("C1: " + str(C1))
     print("C2: " + str(C2))
     print("TC: " + str(TC))
-    DesignRainfallInformation(TC, WRC_ARR)
+    print(WRC_ARR)
+    print(DRI_ARR)
+    print(PF_ARR)
+    
     
     
 
