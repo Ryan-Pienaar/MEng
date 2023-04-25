@@ -1,9 +1,7 @@
 import math
 import numpy
 from array import *
-import grid_rainfall as gr
-import importlib
-importlib.reload(gr)
+import methods.grid_rainfall as gr
 
 # OUTPUT VARIABLES
 C1 = 0.00
@@ -567,7 +565,7 @@ def DesignRainfallInformation(TC, wrc_arr):
         else:
             arr[0][i] = 0
         
-        arr[1][i] = 0 #gr.lookup(47.875, i+1, rainfall_grid)
+        arr[1][i] = gr.lookup(47.875, i+1, rainfall_grid)
 
         if TC == 0:
             arr[2][i] = 0
@@ -588,7 +586,6 @@ def DesignRainfallInformation(TC, wrc_arr):
         elif Area <= 10 and TC > 10:
             arr[4][i] = arr[2][i]
         elif ARF == 0:
-            print(arr[2][i])
             arr[4][i] = (arr[3][i] / 100) * arr[2][i]
         else:
             arr[4][i] = (ARF / 100) * arr[2][i]
@@ -613,7 +610,6 @@ if __name__ == '__main__':
     WRC_ARR = WheightedRunoffCoefficients(C1, C2)
     DRI_ARR = DesignRainfallInformation(TC, WRC_ARR)
     PF_ARR = PeakFlow(WRC_ARR, DRI_ARR)
-    #CT2, CT5, CT10, CT20, CT50, CT100, CT200 = WheightedRunoffCoefficients(C1, C2)
     print("C1: " + str(C1))
     print("C2: " + str(C2))
     print("TC: " + str(TC))
@@ -622,7 +618,20 @@ if __name__ == '__main__':
     print(PF_ARR)
     
     
-    
+def excecute():
+    C1 = RuralRunoffCoefficient()
+    C2 = UrbanRunoffCoefficients()
+    TC = TimeOfConcentration()
+    WRC_ARR = WheightedRunoffCoefficients(C1, C2)
+    DRI_ARR = DesignRainfallInformation(TC, WRC_ARR)
+    PF_ARR = PeakFlow(WRC_ARR, DRI_ARR)
+    print("C1: " + str(C1))
+    print("C2: " + str(C2))
+    print("TC: " + str(TC))
+    print(WRC_ARR)
+    print(DRI_ARR)
+    print(PF_ARR)
+
 
 
 
