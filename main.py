@@ -35,6 +35,19 @@ def readfile(path, sheet):
 
     return objs
 
+def show_methods():
+    print(center_m_title)
+    print("List of methods:")
+    print("(1) Rational Method")
+    print("(2) Alternative Rational Method -- NOT IMPLEMENTED --")
+    print("(3) SCS Method -- NOT IMPLEMENTED --")
+    print("(4) SDF Method -- NOT IMPLEMENTED --")
+    print("(5) Empirical Methods -- NOT IMPLEMENTED --")
+    print("(6) Synthetic Unit Hydrograph Method -- NOT IMPLEMENTED --")
+    print("(7) Lag-Routed Hydrograph Method -- NOT IMPLEMENTED --")
+    print("(8) Probabilisti Methods (AMS) -- NOT IMPLEMENTED --")
+    print("(9) Probabilisti Methods (PDS) -- NOT IMPLEMENTED --")
+
 
 # MAIN FUNCTION
 if __name__ == '__main__':
@@ -63,19 +76,9 @@ if __name__ == '__main__':
 
     methods_title = "METHODS"
     center_m_title = methods_title.center(204, "-")
-    print(center_m_title)
-
-    print("List of methods:")
-    print("(1) Rational Method")
-    print("(2) Alternative Rational Method -- NOT IMPLEMENTED --")
-    print("(3) SCS Method -- NOT IMPLEMENTED --")
-    print("(4) SDF Method -- NOT IMPLEMENTED --")
-    print("(5) Empirical Methods -- NOT IMPLEMENTED --")
-    print("(6) Synthetic Unit Hydrograph Method -- NOT IMPLEMENTED --")
-    print("(7) Lag-Routed Hydrograph Method -- NOT IMPLEMENTED --")
-    print("(8) Probabilisti Methods (AMS) -- NOT IMPLEMENTED --")
-    print("(9) Probabilisti Methods (PDS) -- NOT IMPLEMENTED --")
-
+    
+    show_methods()
+    
     method = int(input("Please choose the number of which method is to be used: "))
 
     while method <= 0 or method >= 10:

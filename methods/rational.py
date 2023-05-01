@@ -1,7 +1,7 @@
 import math
 import numpy
 from array import *
-import methods.grid_rainfall as gr
+import grid_rainfall as gr
 
 # OUTPUT VARIABLES
 C1 = 0.00
@@ -603,21 +603,21 @@ def PeakFlow(wrc_arr, dri_arr):
 
     return arr
 
-if __name__ == '__main__':
-    C1 = RuralRunoffCoefficient()
-    C2 = UrbanRunoffCoefficients()
-    TC = TimeOfConcentration()
-    WRC_ARR = WheightedRunoffCoefficients(C1, C2)
-    DRI_ARR = DesignRainfallInformation(TC, WRC_ARR)
-    PF_ARR = PeakFlow(WRC_ARR, DRI_ARR)
-    print("C1: " + str(C1))
-    print("C2: " + str(C2))
-    print("TC: " + str(TC))
-    print(WRC_ARR)
-    print(DRI_ARR)
-    print(PF_ARR)
+def print_array(arr):
+    arr_length = len(arr)
+    arr_width = int(numpy.size(arr) / arr_length)
     
-    
+    print("-------------------------------------------------------------------------------------")
+    print("|     2     |     5     |    10     |    20     |    50     |    100    |    200    |")
+    print("-------------------------------------------------------------------------------------")
+    for i in range (arr_length):
+        temp = 1
+        print("|  ", end="")
+        for j in range (arr_width):
+            print(f'{round(arr[i][j], 6):.6f}' + " |  ", end="")
+        print()
+    print("-------------------------------------------------------------------------------------")
+
 def excecute():
     C1 = RuralRunoffCoefficient()
     C2 = UrbanRunoffCoefficients()
@@ -628,10 +628,14 @@ def excecute():
     print("C1: " + str(C1))
     print("C2: " + str(C2))
     print("TC: " + str(TC))
-    print(WRC_ARR)
-    print(DRI_ARR)
+    print_array(WRC_ARR)
+    print_array(DRI_ARR)
+
+    
     print(PF_ARR)
 
+if __name__ == '__main__':
+    excecute()
 
 
 
