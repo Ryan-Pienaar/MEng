@@ -37,8 +37,6 @@ CoastalWinter = False
 GridDesignRainfall = False
 
 # PHYSICAL CATCHMENT CHARACTERISTICS
-RainfallRegion = None
-MAP = 518
 Area = 6331
 OFD = 0.00 # Lo
 OFHD = 0.00 # H
@@ -107,6 +105,15 @@ CityCentre = 4.63
 Suburban = 24.55
 Streets = 0.00
 MaximumFlood = 0.00
+
+# ---- RLMA-SAWS/TR102 N-DAY DESIGN RAINFALL INFO VARIABLES ----
+design_rainfall_depth = numpy.zeros((4,8))
+StationNumber = None
+StationName = None
+RainfallRegion = None
+thunderdays = 0
+MAX = 0
+MAP = 518
 
 def RuralRunoffCoefficient():
 
@@ -560,9 +567,9 @@ def DesignRainfallInformation(TC, wrc_arr):
         elif TC == 0:
             arr[0][i] = 0
         elif TC < 6:
-            arr[0][i] = 1
+            arr[0][i] = 1.13 * (0.41 + 0.64 * math.log(tp[i])) * (-0.11 + 0.27 * math.log(TC * 60)) * (0.79 * math.pow(MAX, 0.69) * math.pow(thunderdays, 0.2))
         else:
-            arr[0][i] = 1.13 * (0.41 + 0.64 * math.log(tp[i])) * (-0.11 + 0.27 * math.log(TC * 60)) * (0.79 * math.pow())
+            arr[0][i] = 1.13 * (0.41 + 0.64 * math.log(tp[i])) * (-0.11 + 0.27 * math.log(360)) * (0.79 * math.pow(MAX, 0.69) * math.pow(thunderdays, 0.2))
         
         arr[2][i] = gr.lookup(47.875, i+1, rainfall_grid)
 
