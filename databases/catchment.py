@@ -47,5 +47,8 @@ class Information:
         self.CActualVelocity = 0.00
         self.MaxVelocity = 0.00
 
+        # -- EXTRA VARIABLES --
+        ARF = 0.00
+
     def test(self):
         print(self.Station)
