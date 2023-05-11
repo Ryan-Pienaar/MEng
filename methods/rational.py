@@ -1,7 +1,11 @@
 import math
 import numpy
 from array import *
-import grid_rainfall as gr
+
+if __name__ == "__main__":
+    import grid_rainfall as gr
+else:
+    import methods.grid_rainfall as gr
 
 # OUTPUT VARIABLES
 C1 = 0.00

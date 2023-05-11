@@ -37,8 +37,6 @@ CoastalWinter = False
 GridDesignRainfall = False
 
 # PHYSICAL CATCHMENT CHARACTERISTICS
-RainfallRegion = None
-MAP = 518
 Area = 6331
 OFD = 0.00 # Lo
 OFHD = 0.00 # H
@@ -107,6 +105,15 @@ CityCentre = 4.63
 Suburban = 24.55
 Streets = 0.00
 MaximumFlood = 0.00
+
+# ---- RLMA-SAWS/TR102 N-DAY DESIGN RAINFALL INFO VARIABLES ----
+design_rainfall_depth = numpy.zeros((4,8))
+StationNumber = None
+StationName = None
+RainfallRegion = None
+thunderdays = 0
+MAX = 0
+MAP = 518
 
 def RuralRunoffCoefficient():
 
@@ -546,7 +553,7 @@ def WheightedRunoffCoefficients(C1, C2):
     return arr
 
 def DesignRainfallInformation(TC, wrc_arr):
-    arr = numpy.zeros((6,7))
+    arr = numpy.zeros((7,7))
     var = [0.47, 0.64, 0.81, 1, 1.3, 1.6, 1.8]
     tp = [2, 5, 10, 20, 50, 100, 200]
     QT = 0
@@ -560,17 +567,36 @@ def DesignRainfallInformation(TC, wrc_arr):
         elif TC == 0:
             arr[0][i] = 0
         elif TC < 6:
-            arr[0][i] = 1
+            arr[0][i] = 1.13 * (0.41 + 0.64 * math.log(tp[i])) * (-0.11 + 0.27 * math.log(TC * 60)) * (0.79 * math.pow(MAX, 0.69) * math.pow(thunderdays, 0.2))
         else:
-            arr[0][i] = 1.13 * (0.41 + 0.64 * math.log(tp[i])) * (-0.11 + 0.27 * math.log(TC * 60)) * (0.79 * math.pow())
+            arr[0][i] = 1.13 * (0.41 + 0.64 * math.log(tp[i])) * (-0.11 + 0.27 * math.log(360)) * (0.79 * math.pow(MAX, 0.69) * math.pow(thunderdays, 0.2))
+
+        if GridDesignRainfall:
+            arr[1][i] = 0
+        elif TC > 6 and TC <= 24:
+            arr[1][i] = (design_rainfall_depth[0][i + 1] - arr[0][i]) / 18 * (TC - 6) + arr[0][i]
+        elif TC >= 24 and TC <= 48:
+            arr[1][i] = (design_rainfall_depth[1][i + 1] - design_rainfall_depth[0][i + 1]) / 24 * (TC - 24) + design_rainfall_depth[0][i + 1]
+        elif TC > 48 and TC <= 72:
+            arr[1][i] = (design_rainfall_depth[2][i + 1] - design_rainfall_depth[1][i + 1]) / 24 * (TC - 48) + design_rainfall_depth[1][i + 1]
+        elif TC > 72 and TC <= 168:
+            arr[1][i] = (design_rainfall_depth[3][i + 1] - design_rainfall_depth[2][i + 1]) / 96 * (TC - 72) + design_rainfall_depth[2][i + 1]
+        else:
+            arr[1][i] = arr[0][i]
+
+
+
         
-        arr[2][i] = gr.lookup(47.875, i+1, rainfall_grid)
+        arr[2][i] = gr.lookup(rounded_tc, i+1, rainfall_grid)
 
         if TC == 0:
             arr[3][i] = 0
         elif arr[2][i] == 0:
-            arr[3][i] = arr[0][i] / TC
-        elif arr[2][i] != 0:
+            if TC < 24 and arr[0][i] > arr[1][i]:
+                arr[3][i] = arr[1][i] / TC
+            else:
+                arr[3][i] = math.max(arr[0][i], arr[1][i]) / TC
+        else:
             arr[3][i] = arr[2][i] / TC
         
         if Area == 0:
