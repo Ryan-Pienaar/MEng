@@ -583,9 +583,6 @@ def DesignRainfallInformation(TC, wrc_arr):
             arr[1][i] = (design_rainfall_depth[3][i + 1] - design_rainfall_depth[2][i + 1]) / 96 * (TC - 72) + design_rainfall_depth[2][i + 1]
         else:
             arr[1][i] = arr[0][i]
-
-
-
         
         arr[2][i] = gr.lookup(rounded_tc, i+1, rainfall_grid)
 
@@ -608,7 +605,7 @@ def DesignRainfallInformation(TC, wrc_arr):
 
         if arr[3][i] == 0:
             arr[5][i] == 0
-        elif Area <= 10 and TC > 10:
+        elif Area <= 10 and TC > 1:
             arr[5][i] = arr[3][i]
         elif ARF == 0:
             arr[5][i] = (arr[4][i] / 100) * arr[3][i]
@@ -624,11 +621,11 @@ def PeakFlow(wrc_arr, dri_arr):
         if dri_arr[4][i] == 0:
             arr[i] = 0
         else:
-            arr[i] = wrc_arr[4][i] * dri_arr[4][i] * Area / 3.6
+            arr[i] = wrc_arr[4][i] * dri_arr[6][i] * Area / 3.6
 
     return arr
 
-if __name__ == '__main__':
+def excecute():
     C1 = RuralRunoffCoefficient()
     C2 = UrbanRunoffCoefficients()
     TC = TimeOfConcentration()
@@ -641,6 +638,3 @@ if __name__ == '__main__':
     print(WRC_ARR)
     print(DRI_ARR)
     print(PF_ARR)
-
-def excecute():
-    print("METHOD NOT IMPLEMENTED")
