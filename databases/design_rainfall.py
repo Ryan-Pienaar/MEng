@@ -1,5 +1,5 @@
-import rlma_saws_database as rlma
-import tr102_database as tr102
+import rlma_saws_database as rlma_data
+import tr102_database as tr102_data
 import numpy as numpy
 from stationinfo import Stations as si
 import pandas as pd
@@ -17,17 +17,56 @@ tr102_database = False
 aritmetic_mean_method = False
 thiessen_polygon_method = False
 
-def arithmeticmean_rlma_saws():
-    temp = 0
+# --- Averages ---
+rlma_saws_mean_map_avg = 0
+rlma_saws_thiessen_map_avg = 0
+rlma_saws_mean_r_avg = 0
+rlma_saws_thiessen_r_avg = 0
+tr102_mean_map_avg = 0
+tr102_thiessen_map_avg = 0
+tr102_mean_r_avg = 0
+tr102_thiessen_r_avg = 0
 
-def thiessenpolygon_rlma_saws():
-    temp = 0
 
-def arithmeticmean_tr102():
-    temp = 0
+def arithmeticmean_rlma_saws(station_list, rlma_saws_database):
+    arr = numpy.zeros((4,7))
+    temp = numpy.zeros((199, 33))
 
-def thiessenpolygon_tr102():
-    temp = 0
+    for i in range(len(station_list)):
+        copy_index = 0
+        curr_station_numb = station_list[i].stationnumb
+        index = 0
+        while (curr_station_numb != rlma_saws_database[index][0]):
+            print(rlma_saws_database[index][0] + " -- " + curr_station_numb)
+            index += 1
+        
+        
+        temp[i][3] = station_list[i].area
+        copy_index += 1
+        temp[i][4] = rlma_saws_database[index][6]
+        for j in range(8, 28):
+            temp[i][copy_index] = rlma_saws_database[index][j]
+            copy_index += 1
+        for j in range(49, 57):
+            temp[i][copy_index] = rlma_saws_database[index][j]
+            copy_index += 1
+        
+    return temp
+        
+
+
+
+def thiessenpolygon_rlma_saws(station_list, rlma_saws_database):
+    arr = numpy.zeros((4,7))
+    temp = numpy.zeros((201, 33))
+
+def arithmeticmean_tr102(station_list, tr102_database):
+    arr = numpy.zeros((4,7))
+    temp = numpy.zeros((201, 33))
+
+def thiessenpolygon_tr102(station_list, tr102_database):
+    arr = numpy.zeros((4,7))
+    temp = numpy.zeros((201, 33))
 
 def readfile():
     dataframe1 = pd.read_excel(path, sheet_name=sheetName, index_col=False, header=None)
@@ -46,11 +85,12 @@ def readfile():
 
 
 if __name__ == "__main__":
-    rlma.readfile()
-    tr102.readfile()
+    rdata = rlma_data.readfile()
+    tr102_data.readfile()
 
     stations = readfile()
-    print(stations[0].stationnumb)
+    ars = arithmeticmean_rlma_saws(stations, rdata)
+    print(ars)
 
     
 
