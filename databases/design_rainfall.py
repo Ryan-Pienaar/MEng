@@ -67,6 +67,14 @@ def arithmeticmean_rlma_saws(station_list, rlma_saws_database):
     rlma_saws_mean_r_avg = col_average(temp, 30)
     #print(rlma_saws_mean_r_avg)
     #print(missing_entries)
+
+    # 1-Day return
+    for i in range(7):
+        arr[0][i] = col_average(temp, i + 2)
+        arr[1][i] = col_average(temp, i + 9)
+        arr[2][i] = col_average(temp, i + 16)
+        arr[3][i] = col_average(temp, i + 23)
+
     return temp, arr
 
 def thiessenpolygon_rlma_saws(station_list, rlma_saws_database):
@@ -113,7 +121,8 @@ if __name__ == "__main__":
     tr102_data.readfile()
 
     stations = readfile()
-    ars = arithmeticmean_rlma_saws(stations, rdata)
+    ars, darr = arithmeticmean_rlma_saws(stations, rdata)
+    print(darr)
     #print(ars)
 
     
