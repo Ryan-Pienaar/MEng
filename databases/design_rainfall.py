@@ -74,7 +74,7 @@ def arithmeticmean_rlma_saws(station_list, rlma_saws_database):
         arr[2][i] = col_average(temp, i + 16)
         arr[3][i] = col_average(temp, i + 23)
 
-    return temp, arr
+    return arr
 
 def thiessenpolygon_rlma_saws(station_list, rlma_saws_database):
     arr = numpy.zeros((4,7))
@@ -132,7 +132,7 @@ def thiessenpolygon_rlma_saws(station_list, rlma_saws_database):
         arr[3][i] = tcol_average(temp, i + 43 + incr)
         incr += 1
 
-    return temp, arr
+    return arr
 
 def arithmeticmean_tr102(station_list, tr102_database):
     arr = numpy.zeros((4,7))
@@ -177,7 +177,7 @@ def arithmeticmean_tr102(station_list, tr102_database):
         arr[2][i] = col_average(temp, i + 16)
         arr[3][i] = col_average(temp, i + 23)
 
-    return temp, arr
+    return arr
 
 def thiessenpolygon_tr102(station_list, tr102_database):
     arr = numpy.zeros((4,7))
@@ -235,7 +235,7 @@ def thiessenpolygon_tr102(station_list, tr102_database):
         arr[3][i] = tcol_average(temp, i + 45 + incr)
         incr += 1
 
-    return temp, arr
+    return arr
 
 def readfile():
     dataframe1 = pd.read_excel(path, sheet_name=sheetName, index_col=False, header=None)
@@ -278,17 +278,25 @@ def tcol_average(in_array, col_index):
 
     return average
 
-if __name__ == "__main__":
+def excecute():
     rdata = rlma_data.readfile()
-    tr102_data = tr102_data.readfile()
-
+    tdata = tr102_data.readfile()
     stations = readfile()
-    ars, darr = thiessenpolygon_tr102(stations, tr102_data)
-    numpy.set_printoptions(suppress = True)
-    print(ars)
-    print(darr)
-    #print(ars)
 
+    rlma_saws_arithmean_array = arithmeticmean_rlma_saws(stations, rdata)
+    rlma_saws_thiessenpoly_array = thiessenpolygon_rlma_saws(stations, rdata)
+    tr102_arithmean_array = arithmeticmean_tr102(stations, tdata)
+    tr102_thiessenpoly_array = thiessenpolygon_tr102(stations, tdata)
+
+    print("RLMA/SAWS Arithmetic Mean MAP Average: " + str(rlma_saws_mean_map_avg))
+    print("RLMA/SAWS Arithmetic Mean R Average: " + str(rlma_saws_mean_r_avg))
+    print("RLMA/SAWS Thiessen Polygon Mean MAP Average: " + str(rlma_saws_thiessen_map_avg))
+    print("RLMA/SAWS Thiessen Polygon R Average: " + str(rlma_saws_thiessen_r_avg))
+    print("TR102 Arithmetic Mean MAP Average: " + str(tr102_mean_map_avg))
+    print("TR102 Arithmetic Mean R Average: " + str(tr102_thiessen_map_avg))
+    print("TR102 Thiessen Polygon MAP Average: " + str(tr102_mean_r_avg))
+    print("TR102 Thiessen Polygon R Average: " + str(tr102_thiessen_r_avg))
     
-
+if __name__ == "__main__":
+    excecute()
     
