@@ -119,11 +119,18 @@ def thiessenpolygon_rlma_saws(station_list, rlma_saws_database):
                     
                 adjusted_index += 1
 
+    rlma_saws_thiessen_map_avg = tcol_average(temp, 1)
+    #print(rlma_saws_mean_map_avg)  
+    rlma_saws_thiessen_r_avg = tcol_average(temp, 59)
+    #print(rlma_saws_mean_r_avg)
+    #print(missing_entries)
+    incr = 0
     for i in range(7):
-        arr[0][i] = col_average(temp, i + 2)
-        arr[1][i] = col_average(temp, i + 9)
-        arr[2][i] = col_average(temp, i + 16)
-        arr[3][i] = col_average(temp, i + 23)
+        arr[0][i] = tcol_average(temp, i + 3 + incr)
+        arr[1][i] = tcol_average(temp, i + 18 + incr)
+        arr[2][i] = tcol_average(temp, i + 29 + incr)
+        arr[3][i] = tcol_average(temp, i + 43 + incr)
+        incr += 1
 
     return temp, arr
 
@@ -174,7 +181,61 @@ def arithmeticmean_tr102(station_list, tr102_database):
 
 def thiessenpolygon_tr102(station_list, tr102_database):
     arr = numpy.zeros((4,7))
-    temp = numpy.zeros((201, 33))
+    temp = numpy.zeros((199, 61))
+    adjusted_index = 0
+    missing_entries = 0
+    
+
+    for i in range(len(station_list)):
+        not_skip = True
+        copy_index = 0
+        curr_station_numb = station_list[i].stationnumb
+        index = 0
+
+        if curr_station_numb != 0:
+            while (curr_station_numb != tr102_database[index][0]):
+                index += 1
+                if index > 1945:
+                    missing_entries += 1
+                    not_skip = False
+                    break
+            
+            if not_skip:
+                temp[adjusted_index][copy_index] = station_list[i].area
+                copy_index += 1
+                temp[adjusted_index][copy_index] = tr102_database[index][6]
+                copy_index += 1
+                temp[adjusted_index][copy_index] = temp[adjusted_index][copy_index - 1] * temp[adjusted_index][0]
+                copy_index += 1
+                for j in range(8, 28):
+                    temp[adjusted_index][copy_index] = tr102_database[index][j]
+                    copy_index += 1
+                    temp[adjusted_index][copy_index] = temp[adjusted_index][copy_index - 1] * temp[adjusted_index][0]
+                    copy_index += 1
+                    
+                for j in range(28, 37):
+                    temp[adjusted_index][copy_index] = tr102_database[index][j]
+                    copy_index += 1
+                    temp[adjusted_index][copy_index] = temp[adjusted_index][copy_index - 1] * temp[adjusted_index][0]
+                    copy_index += 1
+                    
+                    
+                adjusted_index += 1
+
+    tr102_thiessen_map_avg = tcol_average(temp, 1)
+    #print(rlma_saws_mean_map_avg)  
+    tr102_thiessen_r_avg = tcol_average(temp, 59)
+    #print(rlma_saws_mean_r_avg)
+    #print("Missing Entries: " + str(missing_entries))
+    incr = 0
+    for i in range(7):
+        arr[0][i] = tcol_average(temp, i + 3 + incr)
+        arr[1][i] = tcol_average(temp, i + 17 + incr)
+        arr[2][i] = tcol_average(temp, i + 31 + incr)
+        arr[3][i] = tcol_average(temp, i + 45 + incr)
+        incr += 1
+
+    return temp, arr
 
 def readfile():
     dataframe1 = pd.read_excel(path, sheet_name=sheetName, index_col=False, header=None)
@@ -203,14 +264,29 @@ def col_average(in_array, col_index):
 
     return average
 
+def tcol_average(in_array, col_index):
+    area_sum = 0
+    sum = 0
+    
+    
+    for i in range(len(in_array)):
+        if in_array[i][col_index + 1] != 0:
+            area_sum += in_array[i][0]
+            sum += in_array[i][col_index + 1]
+    
+    average = sum / area_sum
+
+    return average
+
 if __name__ == "__main__":
     rdata = rlma_data.readfile()
     tr102_data = tr102_data.readfile()
 
     stations = readfile()
-    ars, darr = thiessenpolygon_rlma_saws(stations, rdata)
+    ars, darr = thiessenpolygon_tr102(stations, tr102_data)
     numpy.set_printoptions(suppress = True)
     print(ars)
+    print(darr)
     #print(ars)
 
     
