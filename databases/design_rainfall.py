@@ -78,7 +78,54 @@ def arithmeticmean_rlma_saws(station_list, rlma_saws_database):
 
 def thiessenpolygon_rlma_saws(station_list, rlma_saws_database):
     arr = numpy.zeros((4,7))
-    temp = numpy.zeros((201, 33))
+    temp = numpy.zeros((199, 61))
+    adjusted_index = 0
+    missing_entries = 0
+    
+
+    for i in range(len(station_list)):
+        not_skip = True
+        copy_index = 0
+        curr_station_numb = station_list[i].stationnumb
+        index = 0
+
+        if curr_station_numb != 0:
+            while (curr_station_numb != rlma_saws_database[index][0]):
+                index += 1
+                if index > 3945:
+                    missing_entries += 1
+                    not_skip = False
+                    break
+            
+            if not_skip:
+                temp[adjusted_index][copy_index] = station_list[i].area
+                copy_index += 1
+                temp[adjusted_index][copy_index] = rlma_saws_database[index][6]
+                copy_index += 1
+                temp[adjusted_index][copy_index] = temp[adjusted_index][copy_index - 1] * temp[adjusted_index][0]
+                copy_index += 1
+                for j in range(8, 28):
+                    temp[adjusted_index][copy_index] = rlma_saws_database[index][j]
+                    copy_index += 1
+                    temp[adjusted_index][copy_index] = temp[adjusted_index][copy_index - 1] * temp[adjusted_index][0]
+                    copy_index += 1
+                    
+                for j in range(49, 58):
+                    temp[adjusted_index][copy_index] = rlma_saws_database[index][j]
+                    copy_index += 1
+                    temp[adjusted_index][copy_index] = temp[adjusted_index][copy_index - 1] * temp[adjusted_index][0]
+                    copy_index += 1
+                    
+                    
+                adjusted_index += 1
+
+    for i in range(7):
+        arr[0][i] = col_average(temp, i + 2)
+        arr[1][i] = col_average(temp, i + 9)
+        arr[2][i] = col_average(temp, i + 16)
+        arr[3][i] = col_average(temp, i + 23)
+
+    return temp, arr
 
 def arithmeticmean_tr102(station_list, tr102_database):
     arr = numpy.zeros((4,7))
@@ -96,7 +143,7 @@ def arithmeticmean_tr102(station_list, tr102_database):
         if curr_station_numb != 0:
             while (curr_station_numb != tr102_database[index][0]):
                 index += 1
-                if index > 3945:
+                if index > 1945:
                     missing_entries += 1
                     not_skip = False
                     break
@@ -109,16 +156,13 @@ def arithmeticmean_tr102(station_list, tr102_database):
                 for j in range(8, 28):
                     temp[adjusted_index][copy_index] = tr102_database[index][j]
                     copy_index += 1
-                for j in range(49, 58):
+                for j in range(28, 37):
                     temp[adjusted_index][copy_index] = tr102_database[index][j]
                     copy_index += 1
                 adjusted_index += 1
 
     tr102_mean_map_avg = col_average(temp, 1)
-    #print(rlma_saws_mean_map_avg)  
     tr102_mean_r_avg = col_average(temp, 30)
-    #print(rlma_saws_mean_r_avg)
-    #print(missing_entries)
 
     for i in range(7):
         arr[0][i] = col_average(temp, i + 2)
@@ -161,11 +205,12 @@ def col_average(in_array, col_index):
 
 if __name__ == "__main__":
     rdata = rlma_data.readfile()
-    tr102_data.readfile()
+    tr102_data = tr102_data.readfile()
 
     stations = readfile()
-    ars, darr = arithmeticmean_rlma_saws(stations, rdata_data)
-    print(darr)
+    ars, darr = thiessenpolygon_rlma_saws(stations, rdata)
+    numpy.set_printoptions(suppress = True)
+    print(ars)
     #print(ars)
 
     
