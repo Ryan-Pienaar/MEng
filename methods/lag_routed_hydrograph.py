@@ -59,7 +59,6 @@ def lookup(arr, lookup_value, column):
             return arr[i][column]
         i += 1
 
-
 def FloodRunoffFactorArays(main_arr):
     arr1 = np.zeros((4, 7))
     arr2 = np.zeros((4, 7))
@@ -197,6 +196,16 @@ def DesignRainfallInformation():
 
 def rainfall_distr_over_time():
     arr = np.zeros((21, 2))
+    rain_distr_arr = lrh_database.readfile()
+
+    for i in range(21):
+        arr[i][0] = i * 5
+        if arr[i][0] == 0:
+            arr[i][1] = 0
+        else:
+            arr[i][1] = round(lookup(rain_distr_arr, TSD, i + 1), 4)
+    
+    print(arr)
 
 def muskingum_routing():
     arr = np.zeros((21, 7))
@@ -206,4 +215,5 @@ def excecute():
 
 if __name__ == "__main__":
     #print(DesignRainfallInformation())
-    print(FloodRunoffFactorArays(DesignRainfallInformation()))
+    #print(FloodRunoffFactorArays(DesignRainfallInformation()))
+    rainfall_distr_over_time()
