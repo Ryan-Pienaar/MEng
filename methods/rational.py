@@ -5,7 +5,7 @@ from array import *
 if __name__ == "__main__":
     import grid_rainfall as gr
 else:
-    import methods.grid_rainfall as gr
+    import grid_rainfall as gr
 
 # OUTPUT VARIABLES
 C1 = 0.00
