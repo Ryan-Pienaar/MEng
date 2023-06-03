@@ -32,7 +32,7 @@ delta_T = 2.4
 L = 186.696
 SCH = 0.00131
 LC = 113.0115
-musk_routing_factor_k1 = 0
+musk_routing_factor_k1 = 0.6 * TC
 musk_routing_factor_k2 = 0
 #TODO: FINISH MUSK VALUES
 musk_C0 = 0.041
@@ -151,11 +151,6 @@ def FloodRunoffFactorArays(main_arr):
         else:
             main_arr[6][i] = main_arr[4][i] / 100 * main_arr[3][i]
 
-
-    #print(arr1)
-    #print(arr2)
-    #print(arr3)
-    #print(arr4)
     return main_arr
 
 def DesignRainfallInformation():
@@ -219,6 +214,9 @@ def muskingum_routing(rdot_arr, dri_arr):
     temp5_arr = np.zeros((21, 6))
     temp6_arr = np.zeros((21, 6))
     temp7_arr = np.zeros((21, 6))
+    
+    temp_arr = np.zeros(21)
+    peakflow_arr = np.zeros(7)
 
     for i in range(1, 21):
         temp1_arr[i][0] = dri_arr[6][0] * (rdot_arr[i][1]/100)
@@ -227,9 +225,66 @@ def muskingum_routing(rdot_arr, dri_arr):
         temp1_arr[i][3] = temp1_arr[i][1] / delta_T
         temp1_arr[i][4] = 0.278 * temp1_arr[i][3] * Area
         temp1_arr[i][5] = musk_C0 * temp1_arr[i][4] + musk_C1 * temp1_arr[i - 1][4] + musk_C2 * temp1_arr[i - 1][5]
+
+        temp2_arr[i][0] = dri_arr[6][1] * (rdot_arr[i][1]/100)
+        temp2_arr[i][1] = temp2_arr[i][0] - temp2_arr[i - 1][0]
+        temp2_arr[i][2] = TSD * rdot_arr[i][0] / 100
+        temp2_arr[i][3] = temp2_arr[i][1] / delta_T
+        temp2_arr[i][4] = 0.278 * temp2_arr[i][3] * Area
+        temp2_arr[i][5] = musk_C0 * temp2_arr[i][4] + musk_C1 * temp2_arr[i - 1][4] + musk_C2 * temp2_arr[i - 1][5]
+
+        temp3_arr[i][0] = dri_arr[6][2] * (rdot_arr[i][1]/100)
+        temp3_arr[i][1] = temp3_arr[i][0] - temp3_arr[i - 1][0]
+        temp3_arr[i][2] = TSD * rdot_arr[i][0] / 100
+        temp3_arr[i][3] = temp3_arr[i][1] / delta_T
+        temp3_arr[i][4] = 0.278 * temp3_arr[i][3] * Area
+        temp3_arr[i][5] = musk_C0 * temp3_arr[i][4] + musk_C1 * temp3_arr[i - 1][4] + musk_C2 * temp3_arr[i - 1][5]
+
+        temp4_arr[i][0] = dri_arr[6][3] * (rdot_arr[i][1]/100)
+        temp4_arr[i][1] = temp4_arr[i][0] - temp4_arr[i - 1][0]
+        temp4_arr[i][2] = TSD * rdot_arr[i][0] / 100
+        temp4_arr[i][3] = temp4_arr[i][1] / delta_T
+        temp4_arr[i][4] = 0.278 * temp4_arr[i][3] * Area
+        temp4_arr[i][5] = musk_C0 * temp4_arr[i][4] + musk_C1 * temp4_arr[i - 1][4] + musk_C2 * temp4_arr[i - 1][5]
+
+        temp5_arr[i][0] = dri_arr[6][4] * (rdot_arr[i][1]/100)
+        temp5_arr[i][1] = temp5_arr[i][0] - temp5_arr[i - 1][0]
+        temp5_arr[i][2] = TSD * rdot_arr[i][0] / 100
+        temp5_arr[i][3] = temp5_arr[i][1] / delta_T
+        temp5_arr[i][4] = 0.278 * temp5_arr[i][3] * Area
+        temp5_arr[i][5] = musk_C0 * temp5_arr[i][4] + musk_C1 * temp5_arr[i - 1][4] + musk_C2 * temp5_arr[i - 1][5]
+
+        temp6_arr[i][0] = dri_arr[6][5] * (rdot_arr[i][1]/100)
+        temp6_arr[i][1] = temp6_arr[i][0] - temp6_arr[i - 1][0]
+        temp6_arr[i][2] = TSD * rdot_arr[i][0] / 100
+        temp6_arr[i][3] = temp6_arr[i][1] / delta_T
+        temp6_arr[i][4] = 0.278 * temp6_arr[i][3] * Area
+        temp6_arr[i][5] = musk_C0 * temp6_arr[i][4] + musk_C1 * temp6_arr[i - 1][4] + musk_C2 * temp6_arr[i - 1][5]
+
+        temp7_arr[i][0] = dri_arr[6][6] * (rdot_arr[i][1]/100)
+        temp7_arr[i][1] = temp7_arr[i][0] - temp7_arr[i - 1][0]
+        temp7_arr[i][2] = TSD * rdot_arr[i][0] / 100
+        temp7_arr[i][3] = temp7_arr[i][1] / delta_T
+        temp7_arr[i][4] = 0.278 * temp7_arr[i][3] * Area
+        temp7_arr[i][5] = musk_C0 * temp7_arr[i][4] + musk_C1 * temp7_arr[i - 1][4] + musk_C2 * temp7_arr[i - 1][5]
+
+    for i in range(21):
+        arr[i][0] = temp1_arr[i][5]
+        arr[i][1] = temp2_arr[i][5]
+        arr[i][2] = temp3_arr[i][5]
+        arr[i][3] = temp4_arr[i][5]
+        arr[i][4] = temp5_arr[i][5]
+        arr[i][5] = temp6_arr[i][5]
+        arr[i][6] = temp7_arr[i][5]
+
+    for i in range(7):
+        for j in range(21):
+            temp_arr[j] = arr[j][i]
+        peakflow_arr[i] = max(temp_arr)
     
-    print(temp1_arr)
-    print(dri_arr[6][0])
+    print(peakflow_arr)
+    #print(dri_arr[6][0])
+    return arr, peakflow_arr
 
 def excecute():
     print("METHOD NOT IMPLEMENTED")
