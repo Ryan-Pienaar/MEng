@@ -34,14 +34,85 @@ SCH = 0.00131
 LC = 113.0115
 musk_routing_factor_k1 = 0.6 * TC
 musk_routing_factor_k2 = 0
-#TODO: FINISH MUSK VALUES
+
 musk_C0 = 0.041
 musk_C1 = 0.04
 musk_C2 = 0.920
 
+musk_temp1= 0
+musk_temp2 = 0
+musk_temp3 = 0
 
 veldtype_based = False
 tc_based = True
+
+if veldtype1_nr == 1:
+    musk_temp1 = 1.83 * math.pow(Area, 0.318)
+elif veldtype1_nr == 2:
+    musk_temp1 = 1.3 * math.pow(Area, 0.318)
+elif veldtype1_nr == 3:
+    musk_temp1 = 1.1 * math.pow(Area, 0.318)
+elif veldtype1_nr == 4:
+    musk_temp1 = 0.97 * math.pow(Area, 0.318)
+elif veldtype1_nr == 5:
+    musk_temp1 = 0.79 * math.pow(Area, 0.318)
+elif veldtype1_nr == 6:
+    musk_temp1 = 0.86 * math.pow(Area, 0.318)
+elif veldtype1_nr == 7:
+    musk_temp1 = 0.48 * math.pow(Area, 0.318)
+elif veldtype1_nr == 8:
+    musk_temp1 = 0.45 * math.pow(Area, 0.318)
+elif veldtype1_nr == 9:
+    musk_temp1 = 0.55 * math.pow(Area, 0.318)
+
+if veldtype2_nr == 1:
+    musk_temp2 = 1.83 * math.pow(Area, 0.318)
+elif veldtype2_nr == 2:
+    musk_temp2 = 1.3 * math.pow(Area, 0.318)
+elif veldtype2_nr == 3:
+    musk_temp2 = 1.1 * math.pow(Area, 0.318)
+elif veldtype2_nr == 4:
+    musk_temp2 = 0.97 * math.pow(Area, 0.318)
+elif veldtype2_nr == 5:
+    musk_temp2 = 0.79 * math.pow(Area, 0.318)
+elif veldtype2_nr == 6:
+    musk_temp2 = 0.86 * math.pow(Area, 0.318)
+elif veldtype2_nr == 7:
+    musk_temp2 = 0.48 * math.pow(Area, 0.318)
+elif veldtype2_nr == 8:
+    musk_temp2 = 0.45 * math.pow(Area, 0.318)
+elif veldtype2_nr == 9:
+    musk_temp2 = 0.55 * math.pow(Area, 0.318)
+
+if veldtype3_nr == 1:
+    musk_temp3 = 1.83 * math.pow(Area, 0.318)
+elif veldtype3_nr == 2:
+    musk_temp3 = 1.3 * math.pow(Area, 0.318)
+elif veldtype3_nr == 3:
+    musk_temp3 = 1.1 * math.pow(Area, 0.318)
+elif veldtype3_nr == 4:
+    musk_temp3 = 0.97 * math.pow(Area, 0.318)
+elif veldtype3_nr == 5:
+    musk_temp3 = 0.79 * math.pow(Area, 0.318)
+elif veldtype3_nr == 6:
+    musk_temp3 = 0.86 * math.pow(Area, 0.318)
+elif veldtype3_nr == 7:
+    musk_temp3 = 0.48 * math.pow(Area, 0.318)
+elif veldtype3_nr == 8:
+    musk_temp3 = 0.45 * math.pow(Area, 0.318)
+elif veldtype3_nr == 9:
+    musk_temp3 = 0.55 * math.pow(Area, 0.318)
+
+musk_routing_factor_k2 = (musk_temp1 * (veldtype1_perc/100)) + (musk_temp2 * (veldtype2_perc/100)) + (musk_temp3 * (veldtype3_perc/100))   
+print(musk_routing_factor_k2)
+
+if tc_based:
+    musk_C2 = math.exp((-1 * delta_T)/musk_routing_factor_k1)
+    musk_C1 = musk_routing_factor_k1/delta_T*(1-musk_C2)-musk_C2
+    musk_C0 = (-1*musk_routing_factor_k1)/delta_T*(1-musk_C2)+1
+elif veldtype_based:
+    musk_C2 = math.exp((-1 * delta_T)/musk_routing_factor_k2)
+    musk_C1 = (-1*musk_routing_factor_k2)/delta_T*(1-musk_C2)+1
 
 ARF = 0
 
