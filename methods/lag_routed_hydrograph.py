@@ -5,6 +5,8 @@ import grid_rainfall as gr
 import rational as rational
 import math as math
 
+np.set_printoptions(suppress=True)
+
 # ------ GLOBAL VARIABLES ------
 path = "Params_20210731.V2.xlsx"
 
@@ -32,9 +34,10 @@ SCH = 0.00131
 LC = 113.0115
 musk_routing_factor_k1 = 0
 musk_routing_factor_k2 = 0
-musk_C0 = 0
-musk_C1 = 0
-musk_C2 = 0
+#TODO: FINISH MUSK VALUES
+musk_C0 = 0.041
+musk_C1 = 0.04
+musk_C2 = 0.920
 
 
 veldtype_based = False
@@ -205,10 +208,28 @@ def rainfall_distr_over_time():
         else:
             arr[i][1] = round(lookup(rain_distr_arr, TSD, i + 1), 4)
     
-    print(arr)
+    return arr
 
-def muskingum_routing():
+def muskingum_routing(rdot_arr, dri_arr):
     arr = np.zeros((21, 7))
+    temp1_arr = np.zeros((21, 6))
+    temp2_arr = np.zeros((21, 6))
+    temp3_arr = np.zeros((21, 6))
+    temp4_arr = np.zeros((21, 6))
+    temp5_arr = np.zeros((21, 6))
+    temp6_arr = np.zeros((21, 6))
+    temp7_arr = np.zeros((21, 6))
+
+    for i in range(1, 21):
+        temp1_arr[i][0] = dri_arr[6][0] * (rdot_arr[i][1]/100)
+        temp1_arr[i][1] = temp1_arr[i][0] - temp1_arr[i - 1][0]
+        temp1_arr[i][2] = TSD * rdot_arr[i][0] / 100
+        temp1_arr[i][3] = temp1_arr[i][1] / delta_T
+        temp1_arr[i][4] = 0.278 * temp1_arr[i][3] * Area
+        temp1_arr[i][5] = musk_C0 * temp1_arr[i][4] + musk_C1 * temp1_arr[i - 1][4] + musk_C2 * temp1_arr[i - 1][5]
+    
+    print(temp1_arr)
+    print(dri_arr[6][0])
 
 def excecute():
     print("METHOD NOT IMPLEMENTED")
@@ -216,4 +237,6 @@ def excecute():
 if __name__ == "__main__":
     #print(DesignRainfallInformation())
     #print(FloodRunoffFactorArays(DesignRainfallInformation()))
-    rainfall_distr_over_time()
+    dri_arr = FloodRunoffFactorArays(DesignRainfallInformation())
+    rdot_arr = rainfall_distr_over_time()
+    muskingum_routing(rdot_arr, dri_arr)
