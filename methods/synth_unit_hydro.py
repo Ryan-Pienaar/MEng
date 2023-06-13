@@ -33,6 +33,9 @@ multiple_rainfall_station = True
 inland_summer = True
 coastal_winter = False
 ARF = 0
+incr_vars = [12, 14, 16, 18, 20]
+adjust_peak_flow = [239, 397, 578, 812, 1236, 1713, 2074]
+TSD = 1
 
 dataframe1 = pd.read_excel(path, sheet_name="flood_runoff_f1", index_col=False, header=None)
 input_arr_2 = dataframe1.to_numpy()
@@ -42,6 +45,15 @@ input_arr_4_5_6_7 = dataframe2.to_numpy()
 
 dataframe3 = pd.read_excel(path, sheet_name="flood_runoff_f3", index_col=False, header=None)
 input_arr_1_3_8_9 = dataframe3.to_numpy()
+
+def max_value(input_arr, column):
+    arr = np.zeros(len(input_arr))
+
+    for i in range(len(input_arr)):
+        arr[i] = input_arr[i][column]
+    
+    val = arr.max()
+    return val
 
 def lookup(arr, lookup_value, column):
     i = 0
@@ -141,7 +153,7 @@ def design_rainfall_info():
     main_arr = np.zeros((8, 10))
     arr1 = np.zeros((8, 5))
     arr2 = np.zeros((8, 5))
-    incr_vars = [12, 14, 16, 18, 20]
+    
 
     for i in range(5):
         if single_rainfall_station or multiple_rainfall_station:
@@ -244,20 +256,66 @@ def design_rainfall_info():
 
 
 
-    print(arr1)
-    print(arr2)
+    #print(arr1) 
+    #print(arr2) 
 
     return arr1, arr2
 
 
-def peak_flow_adjust():
-    temp = 0
+def peak_flow_adjust(s_curve_lag_arr, dsri_arr1, dsri_arr2):
+    arr1 = np.zeros((3, 5))
+    arr2 = np.zeros((3, 5))
 
-def s_curve_lagging():
-    temp = 0
+    for i in range(5):
+        if incr_vars[i] == 0:
+            arr1[0][i] = 0
+            arr2[0][i] = 0
+            arr1[1][i] = 0
+            arr2[1][i] = 0
+        else:
+            arr1[0][i] = max_value(s_curve_lag_arr, i+4) * QP
+            arr2[0][i] = max_value(s_curve_lag_arr, i+4) * QP
+            arr1[1][i] = arr1[0][i] * dsri_arr1[7][i]
+            arr2[1][i] = arr2[0][i] * dsri_arr2[7][i]
+
+        if max_value(s_curve_lag_arr, 2) < 1:
+            arr1[2][i] = max_value(s_curve_lag_arr, 2)
+            arr2[2][i] = max_value(s_curve_lag_arr, 2)
+        else:
+            arr1[2][i] = 1
+            arr2[2][i] = 1
+
+    #print(arr1)
+    #print(arr2)
+
+    return arr1, arr2
+
+
+def s_curve_lagging(TSD):
+
+    if TSD == 1:
+        dataframe1 = pd.read_excel(path, sheet_name="suh_curve_lag_1", index_col=False, header=None)
+        arr = dataframe1.to_numpy()
+        return arr
+
+    elif TSD == 0.5:
+        dataframe2 = pd.read_excel(path, sheet_name="suh_curve_lag_2", index_col=False, header=None)
+        arr = dataframe2.to_numpy()
+        return arr
+        
+    elif TSD == 0.25:
+        dataframe3 = pd.read_excel(path, sheet_name="suh_curve_lag_3", index_col=False, header=None)
+        arr = dataframe3.to_numpy()
+        return arr
+    
+    else:
+        raise ValueError("Invalid TSD Value: Must be 1, 0.5 or 0.25")
 
 if __name__ == "__main__":
-    design_rainfall_info()
+    np.set_printoptions(suppress = True)
+    dsri_arr1, dsri_arr2 = design_rainfall_info()
+    s_curve_lagging = s_curve_lagging(TSD)
+    pfa_arr1, pfa_arr2 = peak_flow_adjust(s_curve_lagging, dsri_arr1, dsri_arr2)
 
 
 
