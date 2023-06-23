@@ -91,7 +91,7 @@ if __name__ == '__main__':
         alt_rational.excecute()
 
     elif method == 3:
-        scs.excecute()
+        scs.execute()
     
     elif method == 4:
         sdf.excecute()
