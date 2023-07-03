@@ -2,7 +2,7 @@ import pandas as pd
 
 # --- GLOBAL VARIABLES ---
 
-path = "~\OneDrive\Documents\VSCode\MEng\methods\Params_20210731.V2.xlsx"
+path = "/Users/ryanpienaar/VSCode/MEng/methods/Params_20210731.V2.xlsx"
 sheetName = "rlma_saws_database"
 
 def readfile():

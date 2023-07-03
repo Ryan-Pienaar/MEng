@@ -316,6 +316,7 @@ if __name__ == "__main__":
     dsri_arr1, dsri_arr2 = design_rainfall_info()
     s_curve_lagging = s_curve_lagging(TSD)
     pfa_arr1, pfa_arr2 = peak_flow_adjust(s_curve_lagging, dsri_arr1, dsri_arr2)
+    print(pfa_arr1)
 
 
 

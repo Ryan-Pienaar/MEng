@@ -5,7 +5,7 @@ from stationinfo import Stations as si
 import pandas as pd
 
 # --- GLOBAL VARIABLES ---
-path = "~\OneDrive\Documents\VSCode\MEng\methods\Params_20210731.V2.xlsx"
+path = "/Users/ryanpienaar/VSCode/MEng/methods/Params_20210731.V2.xlsx"
 sheetName = "rainfall_stations"
 userMAP = 0
 gridMAP = 0
@@ -278,24 +278,30 @@ def tcol_average(in_array, col_index):
 
     return average
 
-def excecute():
+def excecute(method_nr):
     rdata = rlma_data.readfile()
     tdata = tr102_data.readfile()
     stations = readfile()
 
-    rlma_saws_arithmean_array = arithmeticmean_rlma_saws(stations, rdata)
-    rlma_saws_thiessenpoly_array = thiessenpolygon_rlma_saws(stations, rdata)
-    tr102_arithmean_array = arithmeticmean_tr102(stations, tdata)
-    tr102_thiessenpoly_array = thiessenpolygon_tr102(stations, tdata)
+    if method_nr == 1:
+        return arithmeticmean_rlma_saws(stations, rdata)
+    elif method_nr == 2:
+        return thiessenpolygon_rlma_saws(stations, rdata)
+    elif method_nr == 3:
+        return arithmeticmean_tr102(stations, tdata)
+    elif method_nr == 4:
+        return thiessenpolygon_tr102(stations, tdata)
 
-    print("RLMA/SAWS Arithmetic Mean MAP Average: " + str(rlma_saws_mean_map_avg))
-    print("RLMA/SAWS Arithmetic Mean R Average: " + str(rlma_saws_mean_r_avg))
-    print("RLMA/SAWS Thiessen Polygon Mean MAP Average: " + str(rlma_saws_thiessen_map_avg))
-    print("RLMA/SAWS Thiessen Polygon R Average: " + str(rlma_saws_thiessen_r_avg))
-    print("TR102 Arithmetic Mean MAP Average: " + str(tr102_mean_map_avg))
-    print("TR102 Arithmetic Mean R Average: " + str(tr102_thiessen_map_avg))
-    print("TR102 Thiessen Polygon MAP Average: " + str(tr102_mean_r_avg))
-    print("TR102 Thiessen Polygon R Average: " + str(tr102_thiessen_r_avg))
+    #print("RLMA/SAWS Arithmetic Mean MAP Average: " + str(rlma_saws_mean_map_avg))
+    #print("RLMA/SAWS Arithmetic Mean R Average: " + str(rlma_saws_mean_r_avg))
+    #print("RLMA/SAWS Thiessen Polygon Mean MAP Average: " + str(rlma_saws_thiessen_map_avg))
+    #print("RLMA/SAWS Thiessen Polygon R Average: " + str(rlma_saws_thiessen_r_avg))
+    #print("TR102 Arithmetic Mean MAP Average: " + str(tr102_mean_map_avg))
+    #print("TR102 Arithmetic Mean R Average: " + str(tr102_thiessen_map_avg))
+    #print("TR102 Thiessen Polygon MAP Average: " + str(tr102_mean_r_avg))
+    #print("TR102 Thiessen Polygon R Average: " + str(tr102_thiessen_r_avg))
+
+
     
 if __name__ == "__main__":
     excecute()
