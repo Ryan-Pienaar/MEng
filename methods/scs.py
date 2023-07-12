@@ -1,7 +1,7 @@
 import numpy as np
 import math as math
-import design_rainfall as dr
-import rational as rm
+import methods.design_rainfall as dr
+import methods.rational as rm
 
 
 # ----- GLOBAL VARIABLES -----

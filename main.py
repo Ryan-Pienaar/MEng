@@ -19,16 +19,21 @@ import methods.lag_routed_hydrograph as lrh
 # LISTS
 CatchmentList = []
 
-
+# C:\Users\ryanp\OneDrive\Documents\VSCode\MEng\methods\230703-Catchment Information Data Sheet.xlsx
+# GENERAL CATCHMENT INFORMATION
 # FUNCTIONS
 def readfile(path, sheet):
     dataframe1 = pd.read_excel(path, sheet_name=sheet, index_col=False, header=None)
+    
+    for i in range(3):
+        dataframe1.drop(index=dataframe1.index[0], axis=0, inplace=True)
+
     input_array = dataframe1.to_numpy()
     objs = list()
 
     for i in range(411):
         temp_array = list()
-        for j in range(102):
+        for j in range(58):
             temp_array.append(input_array[i][j])
         obj = catchment(temp_array)
         objs.append(obj)

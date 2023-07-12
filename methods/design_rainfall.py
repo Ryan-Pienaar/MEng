@@ -1,7 +1,7 @@
-import rlma_saws_database as rlma_data
-import tr102_database as tr102_data
+import methods.rlma_saws_database as rlma_data
+import methods.tr102_database as tr102_data
 import numpy as numpy
-from stationinfo import Stations as si
+from methods.stationinfo import Stations as si
 import pandas as pd
 
 # --- GLOBAL VARIABLES ---

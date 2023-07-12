@@ -1,8 +1,8 @@
-import lrh_rainfall_distr as lrh_database
+import methods.lrh_rainfall_distr as lrh_database
 import numpy as np
 import pandas as pd
-import grid_rainfall as gr
-import rational as rational
+import methods.grid_rainfall as gr
+import methods.rational as rational
 import math as math
 
 np.set_printoptions(suppress=True)

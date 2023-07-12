@@ -7,48 +7,47 @@ class Information:
         self.SDRN = infolist[2]
         self.TDRN = infolist[3]
         self.QDRN = infolist[4]
-        self.CatchmentDescr = None
 
         # AREA DISTRIBUTION FACTORS
-        self.Area = 0.00
-        self.RuralPerc = 0.00
-        self.UrbanPerc = 0.00
-        self.LakePerc = 0.00
-        self.DolomitePerc = 0.00
+        self.Area = infolist[12]
+        self.RuralPerc = infolist[23]
+        self.UrbanPerc = infolist[24]
+        self.LakePerc = infolist[25]
+        self.DolomitePerc = infolist[26]
 
         # DESIGN RAINFALL INFORMATION
-        self.SRT = False
-        self.MRT = False
-        self.RLM_SI_DR = False
-        self.MAP = 0.00
+        self.SRT = infolist[55]
+        self.MRT = infolist[56]
+        self.RLM_SI_DR = infolist[54]
+        self.MAP = infolist[57]
 
         # CATCHMENT CLASSIFICATION
-        self.InlandSummerRain = False
-        self.CoastalWinterRain = False
-        self.FlatPermeable = False
-        self.SteepImpermeable = False
+        self.InlandSummerRain = infolist[19]
+        self.CoastalWinterRain = infolist[20]
+        self.FlatPermeable = infolist[21]
+        self.SteepImpermeable = infolist[22]
 
         # FLOW PATHS: NATURAL
-        self.OF = 0.00
-        self.OFHD = 0.00
-        self.OFSD = None
-        self.OFCC = 0.00
-        self.LMW = 0.00
-        self.AMWS = 0.00
+        self.OF = infolist[28]
+        self.OFHD = infolist[29]
+        self.OFSD = infolist[30]
+        self.DTCC = infolist[31]
+        self.LMW =infolist[32]
+        self.AMWS = infolist[33]
 
         # FLOW PATHS: ARTIFICIAL
         # -- STREET FLOW --
-        self.FPL = 0.00
-        self.Slope = 0.00
-        self.ManningValue = 0.00
-        self.SActualVelocity = 0.00
+        self.FPL = infolist[34]
+        self.Slope = infolist[35]
+        self.ManningValue = infolist[36]
+        self.SActualVelocity = infolist[37]
         # -- CANAL FLOW --
-        self.CanalLength = 0.00
-        self.CActualVelocity = 0.00
-        self.MaxVelocity = 0.00
+        self.CanalLength = infolist[38]
+        self.CActualVelocity = infolist[39]
+        self.MaxVelocity = infolist[41]
 
         # -- EXTRA VARIABLES --
-        ARF = 0.00
+        self.ARF = infolist[51]
 
     def test(self):
         print(self.Station)

@@ -1,6 +1,6 @@
 import numpy as np
 import math as math
-import grid_rainfall as gr
+import methods.grid_rainfall as gr
 import pandas as pd
 
 path = "Params_20210731.V2.xlsx"

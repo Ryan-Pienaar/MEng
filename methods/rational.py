@@ -2,11 +2,8 @@ import math
 import numpy
 from array import *
 import pandas as pd
-
-if __name__ == "__main__":
-    import grid_rainfall as gr
-else:
-    import grid_rainfall as gr
+import methods.grid_rainfall as gr
+    
 
 # OUTPUT VARIABLES
 C1 = 0.00
@@ -112,13 +109,9 @@ Suburban = 24.55
 Streets = 0.00
 MaximumFlood = 0.00
 
+# --- INPUT VARIABLE ARRAY ---
 
-def read_variables():
-    dataframe1 = pd.read_excel("230703-Rational Method Data Sheet.xlsx", index_col=False, header=None)
-    #dataframe1.drop(level=1)
-    variable_arr = dataframe1.to_numpy()
-    print(variable_arr)
-
+    
 def RuralRunoffCoefficient():
 
     # MAIN COEFFICIENTS
@@ -648,7 +641,8 @@ def excecute():
 
 if __name__ == '__main__':
     #excecute()
-    read_variables()
+    #read_variables()
+    temp = 0
 
 
 
