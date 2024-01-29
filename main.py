@@ -25,15 +25,15 @@ CatchmentList = []
 def readfile(path, sheet):
     dataframe1 = pd.read_excel(path, sheet_name=sheet, index_col=False, header=None)
     
-    for i in range(3):
-        dataframe1.drop(index=dataframe1.index[0], axis=0, inplace=True)
+    #for i in range(3):
+    #    dataframe1.drop(index=dataframe1.index[0], axis=0, inplace=True)
 
     input_array = dataframe1.to_numpy()
     objs = list()
 
     for i in range(411):
         temp_array = list()
-        for j in range(58):
+        for j in range(152):
             temp_array.append(input_array[i][j])
         obj = catchment(temp_array)
         objs.append(obj)
@@ -61,16 +61,17 @@ if __name__ == '__main__':
     c_title = title.center(204, "-")
     print(c_title)
 
-    FilePath = input("Please enter data file location: ")
+    #FilePath = input("Please enter data file location: ")
+    FilePath = "Params_20210731.V2.xlsx"
 
-    while not exists(FilePath):
-        FilePath = input("File not found. Please enter correct file name or file path: ")
+    #while not exists(FilePath):
+     #   FilePath = input("File not found. Please enter correct file name or file path: ")
     
     xlsx_file = pd.ExcelFile(FilePath)
 
     print("Current sheets in xlsx file: ", xlsx_file.sheet_names)
 
-    SheetName = input("Please enter sheet name of main data set: ")
+    SheetName = "python_read"
 
     while SheetName not in xlsx_file.sheet_names:
         SheetName = input("Sheet does not exist. Please enter valid sheet name: ")
@@ -90,7 +91,7 @@ if __name__ == '__main__':
         method = input("ERR: INVALID METHOD NUMBER. Please choose a valid method number: ")
     
     if method == 1:
-        rational.excecute()
+        rational.excecute(CatchmentList)
 
     elif method == 2:
         alt_rational.excecute()

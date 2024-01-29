@@ -3,6 +3,7 @@ import numpy
 from array import *
 import pandas as pd
 import methods.grid_rainfall as gr
+from databases.catchment import Information
     
 
 # OUTPUT VARIABLES
@@ -25,92 +26,261 @@ IT = 0.00
 ARF = 0.00
 LT_AVG = 0.00
 
+#GLOBAL VARIABLES
 # INFORMATION VARIABLES
-SDRN = None
-TDRN = None
-QSDRN = None
-CatchmentDesc = None
-FlatPermiable = True
-SteepImpermiable = False
-SingleRainfallStation = False
-MultipleRainfallStations = True
-InlandSummer = True
-CoastalWinter = False
+global SDRN
+global TDRN
+global QDRN
+global CatchmentDesc
+global FlatPermiable
+global SteepImpermiable
+global SingleRainfallStation
+global MultipleRainfallStations
+global InlandSummer
+global CoastalWinter
 
 # PHYSICAL CATCHMENT CHARACTERISTICS
-RainfallRegion = None
-MAP = 518
-Area = 6331
-OFD = 0.00 # Lo
-OFHD = 0.00 # H
-AOS = 0.00 # So
-OFS = 0.00 # r-value
-LMW = 186.696 # Lch
-ACS = 0.00131 # Sch
+global RainfallRegion
+global MAP
+global Area
+global OFD # Lo
+global OFHD # H
+global AOS # So
+global OFS # r-value
+global LMW # Lch
+global ACS # Sch
 # -- AREA DISTRIBUTION FACTORS --
-RuralPerc = 96.62
-UrbanPerc = 3.04
-LakesPerc = 0.34
-DolomitePerc = 0.00
+global RuralPerc
+global UrbanPerc
+global LakesPerc
+global DolomitePerc
 # -- ARTIFICIAL FLOW --
-UseArtifical = False
+global UseArtifical
 # -- STREET FLOW --
-FlowPathLength = 0.00
-Slope = 0.00
-ActualVelocityS = 0.00
+global FlowPathLength
+global Slope
+global ActualVelocityS
 # -- CANAL FLOW --
-CanalLength = 0.00
-ActualVelocityC = 0.00
-MaxVelocity = 0.00
+global CanalLength
+global ActualVelocityC
+global MaxVelocity
 
 # -- RURAL RUNOFF VARIABLES --
 #AVERAGE CATCHMENT SLOPE VARIABLE
-VleisAndPans = 57.6
-FlatAreas = 34.3
-Hilly = 6.7
-SteepAreas = 1.4
+global VleisAndPans
+global FlatAreas
+global Hilly
+global SteepAreas
 
 # PERMEABILITY VARIABLES
-A = 0.00
-AB = 23.15
-B = 27.31
-BC = 2.82
-C = 0.00
-CD = 15.69
-D = 31.03
+global A
+global AB
+global B
+global BC
+global C
+global CD
+global D
 
 # LAND USE/VEGETATION
-ThickBush_Plantations = 4.34
-LightBush_Farmlands = 0.73
-Grasslands = 80.18
-Cultivatedland_Contoured = 0.00
-Cultivatedland = 14.29
-NoVegetation = 0.46
+global ThickBush_Plantations
+global LightBush_Farmlands
+global Grasslands
+global Cultivatedland_Contoured
+global Cultivatedland
+global NoVegetation
 
 # -- URBAN RUNOFF VARIABLES --
 # LAWNS
-SandyFlat = 0.00
-SandySteep = 0.00
-HeavySoilFlat = 0.00
-HeavySoilSteep = 0.00
+global SandyFlat
+global SandySteep
+global HeavySoilFlat
+global HeavySoilSteep
 
 # RESIDENTIAL AREAS
-Houses = 59.12
-Flats = 0.14
+global Houses
+global Flats
 
 # INDUSTRY
-LightIndustry = 11.53
-AverageIndustry = 0.00
-HeavyIndustry = 0.03
+global LightIndustry
+global AverageIndustry
+global HeavyIndustry
 
 # BUSINESSES
-CityCentre = 4.63
-Suburban = 24.55
-Streets = 0.00
-MaximumFlood = 0.00
+global CityCentre
+global Suburban
+global Streets
+global MaximumFlood
 
 # --- INPUT VARIABLE ARRAY ---
+def ImportCatchmentData(catch):
+    #GLOBAL VARIABLES
+    # INFORMATION VARIABLES
+    global SDRN
+    global TDRN
+    global QDRN
+    global CatchmentDesc
+    global FlatPermiable
+    global SteepImpermiable
+    global SingleRainfallStation
+    global MultipleRainfallStations
+    global InlandSummer
+    global CoastalWinter
 
+    # PHYSICAL CATCHMENT CHARACTERISTICS
+    global RainfallRegion
+    global MAP
+    global Area
+    global OFD # Lo
+    global OFHD # H
+    global AOS # So
+    global OFS # r-value
+    global LMW # Lch
+    global ACS # Sch
+    # -- AREA DISTRIBUTION FACTORS --
+    global RuralPerc
+    global UrbanPerc
+    global LakesPerc
+    global DolomitePerc
+    # -- ARTIFICIAL FLOW --
+    global UseArtifical
+    # -- STREET FLOW --
+    global FlowPathLength
+    global Slope
+    global ActualVelocityS
+    # -- CANAL FLOW --
+    global CanalLength
+    global ActualVelocityC
+    global MaxVelocity
+
+    # -- RURAL RUNOFF VARIABLES --
+    #AVERAGE CATCHMENT SLOPE VARIABLE
+    global VleisAndPans
+    global FlatAreas
+    global Hilly
+    global SteepAreas
+
+    # PERMEABILITY VARIABLES
+    global A
+    global AB
+    global B
+    global BC
+    global C
+    global CD
+    global D
+
+    # LAND USE/VEGETATION
+    global ThickBush_Plantations
+    global LightBush_Farmlands
+    global Grasslands
+    global Cultivatedland_Contoured
+    global Cultivatedland
+    global NoVegetation
+
+    # -- URBAN RUNOFF VARIABLES --
+    # LAWNS
+    global SandyFlat
+    global SandySteep
+    global HeavySoilFlat
+    global HeavySoilSteep
+
+    # RESIDENTIAL AREAS
+    global Houses
+    global Flats
+
+    # INDUSTRY
+    global LightIndustry
+    global AverageIndustry
+    global HeavyIndustry
+
+    # BUSINESSES
+    global CityCentre
+    global Suburban
+    global Streets
+    global MaximumFlood
+
+    # INFORMATION VARIABLES
+    SDRN = catch.SDRN
+    TDRN = catch.TDRN
+    QDRN = catch.QDRN
+    CatchmentDesc = None
+    FlatPermiable = catch.FlatPerm
+    SteepImpermiable = catch.SteepImperm
+    SingleRainfallStation = False
+    MultipleRainfallStations = True
+    InlandSummer = catch.SummerRain
+    CoastalWinter = catch.WinterRain
+
+    # PHYSICAL CATCHMENT CHARACTERISTICS
+    RainfallRegion = None
+    MAP = catch.MAP
+    Area = catch.Area
+    OFD = catch.LO # Lo
+    OFHD = catch.H # H
+    AOS = catch.AvgOverlandSlope # So
+    OFS = catch.OFS # r-value
+    LMW = catch.LCH # Lch
+    ACS = catch.SCH # Sch
+    # -- AREA DISTRIBUTION FACTORS --
+    RuralPerc = catch.RurualPerc
+    UrbanPerc = catch.UrbanPerc
+    LakesPerc = catch.LakesPerc
+    DolomitePerc = catch.DolomitePerc
+    # -- ARTIFICIAL FLOW --
+    UseArtifical = False
+    # -- STREET FLOW --
+    FlowPathLength = catch.UrbanFPL
+    Slope = catch.UrbanSlope
+    ActualVelocityS = catch.UrbanSActualVelocity
+    # -- CANAL FLOW --
+    CanalLength = catch.UrbanCanalLen
+    ActualVelocityC = catch.UrbanCActualVelocity
+    MaxVelocity = catch.UrbanCMaxVelocity
+
+    # -- RURAL RUNOFF VARIABLES --
+    #AVERAGE CATCHMENT SLOPE VARIABLE
+    VleisAndPans = catch.VleisAndPans
+    FlatAreas = catch.FlatAreas
+    Hilly = catch.Hilly
+    SteepAreas = catch.SteepAreas
+
+    # PERMEABILITY VARIABLES
+    A = 0.00
+    AB = 0.00
+    B = 100.0
+    BC = 0.00
+    C = 0.00
+    CD = 0.00
+    D = 0.00
+
+    # LAND USE/VEGETATION
+    ThickBush_Plantations =catch.ThickBushPerc
+    LightBush_Farmlands = catch.LightBushPerc
+    Grasslands = catch.GrasslandPerc
+    Cultivatedland_Contoured = catch.CultivLandContPerc
+    Cultivatedland = catch.CultivLandPerc
+    NoVegetation = catch.NoVegPerc
+
+    # -- URBAN RUNOFF VARIABLES --
+    # LAWNS
+    SandyFlat = catch.SandyFlatPerc
+    SandySteep = catch.SandySteepPerc
+    HeavySoilFlat = catch.HeavySoilFlatPerc
+    HeavySoilSteep = catch.HeavySoilSteepPerc
+
+    # RESIDENTIAL AREAS
+    Houses = catch.HousesPerc
+    Flats = catch.FlatsPerc
+
+    # INDUSTRY
+    LightIndustry = catch.LightIndustryPerc
+    AverageIndustry = catch.AverageIndustryPerc
+    HeavyIndustry = catch.HeavyIndustryPerc
+
+    # BUSINESSES
+    CityCentre = catch.CityCentrePerc
+    Suburban = catch.SuburbanPerc
+    Streets = catch.StreetsPerc
+    MaximumFlood = catch.MaxFlood
     
 def RuralRunoffCoefficient():
 
@@ -164,7 +334,7 @@ def RuralRunoffCoefficient():
         Cultivatedland_Factor = 0.00
         NoVegetation_Factor = 0.00
 
-    elif MAP < 600:
+    elif MAP < 600.00:
         FactorVP = 0.01
         FactorFA = 0.06
         FactorH = 0.12
@@ -246,6 +416,7 @@ def RuralRunoffCoefficient():
         CS4 = SteepAreas / 100 * FactorSA
 
     CS = CS1 + CS2 + CS3 + CS4
+
 
     # ----- CP CALCULATIONS -----
     CP1 = 0.00
@@ -462,6 +633,8 @@ def UrbanRunoffCoefficients():
     return (CL + CR + CI + CB)
 
 def TimeOfConcentration():
+    r_val_table = [0.02, 0.02, 0.025, 0.035, 0.06, 0.1, 0.1, 0.15, 0.25, 0.3, 0.3, 0.4, 0.4, 0.8]
+
     tau = 0.00
     UseCorrectionFactor = False
     TC1 = 0.00
@@ -486,7 +659,7 @@ def TimeOfConcentration():
     if OFD == 0:
         TC1 = 0
     else:
-        TC1 = 0.604 * (math.pow((OFS * OFD) / (math.pow(AOS, 0.5)), 0.467))
+        TC1 = 0.604 * (math.pow((r_val_table[OFS-1] * OFD) / (math.pow(AOS, 0.5)), 0.467))
 
     # ----- TC2 CALCULATION -----
     if ACS == 0:
@@ -505,6 +678,10 @@ def TimeOfConcentration():
         TC3 = (FlowPathLength / ActualVelocityS) / 3.6
     else:
         TC3 = ((CanalLength / ActualVelocityC) / 3.6) + ((FlowPathLength / ActualVelocityS) / 3.6)
+
+    #print(TC1)
+    #print(TC2)
+    #print(TC3)
 
     return (TC1 + TC2 + TC3)
 
@@ -546,10 +723,12 @@ def WheightedRunoffCoefficients(C1, C2):
     
     for i in range(7):
         arr[0][i] = C1
-        arr[1][i] = (C1 * (1 - DolomitePerc/100) + (C1 * SteepAreas / 100) * ((VleisAndPans/100*0.1) + (FlatAreas/100*0.2) + (Hilly/100*0.35) + (SteepAreas/100*0.5)))
+        arr[1][i] = (C1 * (1 - DolomitePerc/100) + (C1 * DolomitePerc / 100) * ((VleisAndPans/100*0.1) + (FlatAreas/100*0.2) + (Hilly/100*0.35) + (SteepAreas/100*0.5)))
         arr[3][i] = arr[1][i] * arr[2][i]
         arr[4][i] = RuralPerc/100*arr[3][i] + UrbanPerc/100*C2 + LakesPerc/100*0
 
+    print(C1)
+    print(arr[1][0])
     return arr
 
 def DesignRainfallInformation(TC, wrc_arr):
@@ -570,7 +749,10 @@ def DesignRainfallInformation(TC, wrc_arr):
         else:
             arr[0][i] = 0
         
-        arr[1][i] = gr.lookup(47.875, i+1, rainfall_grid)
+        if UseArtifical:
+            arr[1][i] = gr.lookup(47.875, i+1, rainfall_grid)
+        else:
+            arr[1][i] = 0
 
         if TC == 0:
             arr[2][i] = 0
@@ -623,7 +805,8 @@ def print_array(arr):
         print()
     print("-------------------------------------------------------------------------------------")
 
-def excecute():
+def excecute(CatchList):
+    ImportCatchmentData(CatchList[0])
     C1 = RuralRunoffCoefficient()
     C2 = UrbanRunoffCoefficients()
     TC = TimeOfConcentration()
@@ -638,6 +821,7 @@ def excecute():
 
     
     print(PF_ARR)
+    print(CatchList[0].MAP)
 
 if __name__ == '__main__':
     #excecute()
