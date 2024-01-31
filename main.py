@@ -109,7 +109,7 @@ if __name__ == '__main__':
         suh.excecute()
     
     elif method == 7:
-        lrh.excecute()
+        lrh.excecute(CatchmentList)
     
     elif method == 8:
         probabilistic_ams.excecute()

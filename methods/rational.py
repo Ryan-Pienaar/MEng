@@ -4,6 +4,7 @@ from array import *
 import pandas as pd
 import methods.grid_rainfall as gr
 from databases.catchment import Information
+import openpyxl
     
 
 # OUTPUT VARIABLES
@@ -207,8 +208,14 @@ def ImportCatchmentData(catch):
     SteepImpermiable = catch.SteepImperm
     SingleRainfallStation = False
     MultipleRainfallStations = True
-    InlandSummer = catch.SummerRain
-    CoastalWinter = catch.WinterRain
+    if catch.SummerRain == 1:
+        InlandSummer = True
+    elif catch.SummerRain == 0:
+        InlandSummer = False
+    if catch.WinterRain == 1:
+        CostalWinter = True
+    elif catch.WinterRain == 0:
+        CoastalWinter = False
 
     # PHYSICAL CATCHMENT CHARACTERISTICS
     RainfallRegion = None
@@ -727,8 +734,6 @@ def WheightedRunoffCoefficients(C1, C2):
         arr[3][i] = arr[1][i] * arr[2][i]
         arr[4][i] = RuralPerc/100*arr[3][i] + UrbanPerc/100*C2 + LakesPerc/100*0
 
-    print(C1)
-    print(arr[1][0])
     return arr
 
 def DesignRainfallInformation(TC, wrc_arr):
@@ -806,22 +811,37 @@ def print_array(arr):
     print("-------------------------------------------------------------------------------------")
 
 def excecute(CatchList):
-    ImportCatchmentData(CatchList[0])
-    C1 = RuralRunoffCoefficient()
-    C2 = UrbanRunoffCoefficients()
-    TC = TimeOfConcentration()
-    WRC_ARR = WheightedRunoffCoefficients(C1, C2)
-    DRI_ARR = DesignRainfallInformation(TC, WRC_ARR)
-    PF_ARR = PeakFlow(WRC_ARR, DRI_ARR)
-    print("C1: " + str(C1))
-    print("C2: " + str(C2))
-    print("TC: " + str(TC))
-    print_array(WRC_ARR)
-    print_array(DRI_ARR)
+    # Create a new Excel workbook
+    wb = openpyxl.Workbook()
 
-    
-    print(PF_ARR)
-    print(CatchList[0].MAP)
+    # Select the active worksheet
+    ws = wb.active
+
+    # Define the precision you want for the floating point numbers
+    precision = 3
+
+    # Write data to Excel file
+    for i in range(411):
+        print(str(i/411*100)+"%")
+        ws.append([str(CatchList[i].Station)])
+        ImportCatchmentData(CatchList[i])
+        C1 = RuralRunoffCoefficient()
+        C2 = UrbanRunoffCoefficients()
+        TC = TimeOfConcentration()
+        WRC_ARR = WheightedRunoffCoefficients(C1, C2)
+        DRI_ARR = DesignRainfallInformation(TC, WRC_ARR)
+        PF_ARR = PeakFlow(WRC_ARR, DRI_ARR)
+        ws.append(["C1: " + str(round(C1, precision))])
+        ws.append(["C2: " + str(round(C2, precision))])
+        ws.append(["TC: " + str(round(TC, precision))])
+        for row in WRC_ARR:
+            ws.append([round(val, precision) for val in row])
+        for row in DRI_ARR:
+            ws.append([round(val, precision) for val in row])
+        ws.append([round(val, precision) for val in PF_ARR])
+
+    # Save the Excel workbook
+    wb.save("rational.xlsx")
 
 if __name__ == '__main__':
     #excecute()

@@ -10,111 +10,199 @@ np.set_printoptions(suppress=True)
 # ------ GLOBAL VARIABLES ------
 path = "Params_20210731.V2.xlsx"
 
-SingleRainfallStation = False
-MultipleRainfallStations = True
-InlandSummer = True
-OutlandWinter = False
+global SingleRainfallStation
+global MultipleRainfallStations
+global InlandSummer
+global OutlandWinter
 
-Area = 6331
-MAP = 518
+global Area
+global MAP
 
-veldtype1_nr = 4
-veldtype2_nr = 7
-veldtype3_nr = 6
+global veldtype1_nr
+global veldtype2_nr
+global veldtype3_nr
 
-veldtype1_perc = 97.29
-veldtype2_perc = 2.71
-veldtype3_perc = 0
+global veldtype1_perc
+global veldtype2_perc
+global veldtype3_perc
 
-TC = 47.875
-TSD = 48
-delta_T = 2.4
-L = 186.696
-SCH = 0.00131
-LC = 113.0115
-musk_routing_factor_k1 = 0.6 * TC
-musk_routing_factor_k2 = 0
+global TC
+global TSD
+global delta_T
+global L
+global SCH
+global LC
 
-musk_C0 = 0.041
-musk_C1 = 0.04
-musk_C2 = 0.920
+global musk_routing_factor_k1
+global musk_routing_factor_k2
 
-musk_temp1= 0
-musk_temp2 = 0
-musk_temp3 = 0
+global musk_C0
+global musk_C1
+global musk_C2
 
-veldtype_based = False
-tc_based = True
+global musk_temp1
+global musk_temp2
+global musk_temp3
 
-if veldtype1_nr == 1:
-    musk_temp1 = 1.83 * math.pow(Area, 0.318)
-elif veldtype1_nr == 2:
-    musk_temp1 = 1.3 * math.pow(Area, 0.318)
-elif veldtype1_nr == 3:
-    musk_temp1 = 1.1 * math.pow(Area, 0.318)
-elif veldtype1_nr == 4:
-    musk_temp1 = 0.97 * math.pow(Area, 0.318)
-elif veldtype1_nr == 5:
-    musk_temp1 = 0.79 * math.pow(Area, 0.318)
-elif veldtype1_nr == 6:
-    musk_temp1 = 0.86 * math.pow(Area, 0.318)
-elif veldtype1_nr == 7:
-    musk_temp1 = 0.48 * math.pow(Area, 0.318)
-elif veldtype1_nr == 8:
-    musk_temp1 = 0.45 * math.pow(Area, 0.318)
-elif veldtype1_nr == 9:
-    musk_temp1 = 0.55 * math.pow(Area, 0.318)
+global veldtype_based
+global tc_based
+global ARF
 
-if veldtype2_nr == 1:
-    musk_temp2 = 1.83 * math.pow(Area, 0.318)
-elif veldtype2_nr == 2:
-    musk_temp2 = 1.3 * math.pow(Area, 0.318)
-elif veldtype2_nr == 3:
-    musk_temp2 = 1.1 * math.pow(Area, 0.318)
-elif veldtype2_nr == 4:
-    musk_temp2 = 0.97 * math.pow(Area, 0.318)
-elif veldtype2_nr == 5:
-    musk_temp2 = 0.79 * math.pow(Area, 0.318)
-elif veldtype2_nr == 6:
-    musk_temp2 = 0.86 * math.pow(Area, 0.318)
-elif veldtype2_nr == 7:
-    musk_temp2 = 0.48 * math.pow(Area, 0.318)
-elif veldtype2_nr == 8:
-    musk_temp2 = 0.45 * math.pow(Area, 0.318)
-elif veldtype2_nr == 9:
-    musk_temp2 = 0.55 * math.pow(Area, 0.318)
+def ImportCatchmentData(catch):
+    global SingleRainfallStation
+    global MultipleRainfallStations
+    global InlandSummer
+    global OutlandWinter
 
-if veldtype3_nr == 1:
-    musk_temp3 = 1.83 * math.pow(Area, 0.318)
-elif veldtype3_nr == 2:
-    musk_temp3 = 1.3 * math.pow(Area, 0.318)
-elif veldtype3_nr == 3:
-    musk_temp3 = 1.1 * math.pow(Area, 0.318)
-elif veldtype3_nr == 4:
-    musk_temp3 = 0.97 * math.pow(Area, 0.318)
-elif veldtype3_nr == 5:
-    musk_temp3 = 0.79 * math.pow(Area, 0.318)
-elif veldtype3_nr == 6:
-    musk_temp3 = 0.86 * math.pow(Area, 0.318)
-elif veldtype3_nr == 7:
-    musk_temp3 = 0.48 * math.pow(Area, 0.318)
-elif veldtype3_nr == 8:
-    musk_temp3 = 0.45 * math.pow(Area, 0.318)
-elif veldtype3_nr == 9:
-    musk_temp3 = 0.55 * math.pow(Area, 0.318)
+    global Area
+    global MAP
 
-musk_routing_factor_k2 = (musk_temp1 * (veldtype1_perc/100)) + (musk_temp2 * (veldtype2_perc/100)) + (musk_temp3 * (veldtype3_perc/100))   
-print(musk_routing_factor_k2)
+    global veldtype1_nr
+    global veldtype2_nr
+    global veldtype3_nr
 
-if tc_based:
-    musk_C2 = math.exp((-1 * delta_T)/musk_routing_factor_k1)
-    musk_C1 = musk_routing_factor_k1/delta_T*(1-musk_C2)-musk_C2
-    musk_C0 = (-1*musk_routing_factor_k1)/delta_T*(1-musk_C2)+1
-elif veldtype_based:
-    musk_C2 = math.exp((-1 * delta_T)/musk_routing_factor_k2)
-    musk_C1 = (-1*musk_routing_factor_k2)/delta_T*(1-musk_C2)+1
+    global veldtype1_perc
+    global veldtype2_perc
+    global veldtype3_perc
 
-ARF = 0
+    global TC
+    global TSD
+    global delta_T
+    global L
+    global SCH
+    global LC
+
+    global musk_routing_factor_k1
+    global musk_routing_factor_k2
+
+    global musk_C0
+    global musk_C1
+    global musk_C2
+
+    global musk_temp1
+    global musk_temp2
+    global musk_temp3
+
+    global veldtype_based
+    global tc_based
+    global ARF
+
+    SingleRainfallStation = False
+    MultipleRainfallStations = True
+    if catch.SummerRain == 1:
+        InlandSummer = True
+    elif catch.SummerRain == 0:
+        InlandSummer = False
+    if catch.WinterRain == 1:
+        OutlandWinter = True
+    elif catch.WinterRain == 0:
+        OutlandWinter = False
+
+    Area = catch.Area
+    MAP  = catch.MAP
+    ARF = catch.ARF
+
+    veldtype1_nr = catch.VTRNum1
+    veldtype2_nr = catch.VTRNum2
+    veldtype3_nr = catch.VTRNum3
+
+    veldtype1_perc = catch.VTRPerc1
+    veldtype2_perc = catch.VTRPerc2
+    veldtype3_perc = catch.VTRPerc3
+
+    rational.ImportCatchmentData(catch)
+    TC = rational.TimeOfConcentration()
+    TSD = round(TC, 0)
+    delta_T = TSD * 0.05
+    L = catch.L
+    SCH = catch.SCH
+    LC = catch.LC
+
+
+# CALCULATED VALUES
+    musk_routing_factor_k1 = 0.6 * TC
+    musk_routing_factor_k2 = 0
+
+    musk_C0 = 0
+    musk_C1 = 0
+    musk_C2 = 0
+
+    musk_temp1= 0
+    musk_temp2 = 0
+    musk_temp3 = 0
+
+    veldtype_based = False
+    tc_based = True
+
+    if veldtype1_nr == 1:
+        musk_temp1 = 1.83 * math.pow(Area, 0.318)
+    elif veldtype1_nr == 2:
+        musk_temp1 = 1.3 * math.pow(Area, 0.318)
+    elif veldtype1_nr == 3:
+        musk_temp1 = 1.1 * math.pow(Area, 0.318)
+    elif veldtype1_nr == 4:
+        musk_temp1 = 0.97 * math.pow(Area, 0.318)
+    elif veldtype1_nr == 5:
+        musk_temp1 = 0.79 * math.pow(Area, 0.318)
+    elif veldtype1_nr == 6:
+        musk_temp1 = 0.86 * math.pow(Area, 0.318)
+    elif veldtype1_nr == 7:
+        musk_temp1 = 0.48 * math.pow(Area, 0.318)
+    elif veldtype1_nr == 8:
+        musk_temp1 = 0.45 * math.pow(Area, 0.318)
+    elif veldtype1_nr == 9:
+        musk_temp1 = 0.55 * math.pow(Area, 0.318)
+
+    if veldtype2_nr == 1:
+        musk_temp2 = 1.83 * math.pow(Area, 0.318)
+    elif veldtype2_nr == 2:
+        musk_temp2 = 1.3 * math.pow(Area, 0.318)
+    elif veldtype2_nr == 3:
+        musk_temp2 = 1.1 * math.pow(Area, 0.318)
+    elif veldtype2_nr == 4:
+        musk_temp2 = 0.97 * math.pow(Area, 0.318)
+    elif veldtype2_nr == 5:
+        musk_temp2 = 0.79 * math.pow(Area, 0.318)
+    elif veldtype2_nr == 6:
+        musk_temp2 = 0.86 * math.pow(Area, 0.318)
+    elif veldtype2_nr == 7:
+        musk_temp2 = 0.48 * math.pow(Area, 0.318)
+    elif veldtype2_nr == 8:
+        musk_temp2 = 0.45 * math.pow(Area, 0.318)
+    elif veldtype2_nr == 9:
+        musk_temp2 = 0.55 * math.pow(Area, 0.318)
+
+    if veldtype3_nr == 1:
+        musk_temp3 = 1.83 * math.pow(Area, 0.318)
+    elif veldtype3_nr == 2:
+        musk_temp3 = 1.3 * math.pow(Area, 0.318)
+    elif veldtype3_nr == 3:
+        musk_temp3 = 1.1 * math.pow(Area, 0.318)
+    elif veldtype3_nr == 4:
+        musk_temp3 = 0.97 * math.pow(Area, 0.318)
+    elif veldtype3_nr == 5:
+        musk_temp3 = 0.79 * math.pow(Area, 0.318)
+    elif veldtype3_nr == 6:
+        musk_temp3 = 0.86 * math.pow(Area, 0.318)
+    elif veldtype3_nr == 7:
+        musk_temp3 = 0.48 * math.pow(Area, 0.318)
+    elif veldtype3_nr == 8:
+        musk_temp3 = 0.45 * math.pow(Area, 0.318)
+    elif veldtype3_nr == 9:
+        musk_temp3 = 0.55 * math.pow(Area, 0.318)
+
+    musk_routing_factor_k2 = (musk_temp1 * (veldtype1_perc/100)) + (musk_temp2 * (veldtype2_perc/100)) + (musk_temp3 * (veldtype3_perc/100))
+    print(musk_routing_factor_k2)
+
+    if tc_based:
+        musk_C2 = math.exp((-1 * delta_T)/musk_routing_factor_k1)
+        musk_C1 = musk_routing_factor_k1/delta_T*(1-musk_C2)-musk_C2
+        musk_C0 = (-1*musk_routing_factor_k1)/delta_T*(1-musk_C2)+1
+    elif veldtype_based:
+        musk_C2 = math.exp((-1 * delta_T)/musk_routing_factor_k2)
+        musk_C1 = (-1*musk_routing_factor_k2)/delta_T*(1-musk_C2)+1
+
+    ARF = 0
 
 dataframe1 = pd.read_excel(path, sheet_name="flood_runoff_f1", index_col=False, header=None)
 input_arr_2 = dataframe1.to_numpy()
@@ -128,9 +216,11 @@ input_arr_1_3_8_9 = dataframe3.to_numpy()
 def lookup(arr, lookup_value, column):
     i = 0
 
-    while True:
+    while (i < 2007):
         if arr[i][0] == lookup_value:
             return arr[i][column]
+        elif i + 1 == 2007:
+            return arr[2006][column]
         i += 1
 
 def FloodRunoffFactorArays(main_arr):
@@ -143,61 +233,62 @@ def FloodRunoffFactorArays(main_arr):
     for i in range(7):
         
         if veldtype1_nr == 1 or veldtype1_nr == 3 or veldtype1_nr == 8 or veldtype1_nr == 9:
+            print(main_arr[3][i])
             arr1[0][i] = lookup(input_arr_1_3_8_9, main_arr[3][i], 1)
             arr2[0][i] = lookup(input_arr_1_3_8_9, main_arr[3][i], 2)
             arr3[0][i] = lookup(input_arr_1_3_8_9, main_arr[3][i], 3)
             arr4[0][i] = lookup(input_arr_1_3_8_9, main_arr[3][i], 4)
-            arr4[0][i] = lookup(input_arr_1_3_8_9, main_arr[3][i], 5)
+            arr5[0][i] = lookup(input_arr_1_3_8_9, main_arr[3][i], 5)
         elif veldtype1_nr == 4 or veldtype1_nr == 5 or veldtype1_nr == 6 or veldtype1_nr == 7:
             arr1[0][i] = lookup(input_arr_4_5_6_7, main_arr[3][i], 1)
             arr2[0][i] = lookup(input_arr_4_5_6_7, main_arr[3][i], 2)
             arr3[0][i] = lookup(input_arr_4_5_6_7, main_arr[3][i], 3)
             arr4[0][i] = lookup(input_arr_4_5_6_7, main_arr[3][i], 4)
-            arr4[0][i] = lookup(input_arr_4_5_6_7, main_arr[3][i], 5)
+            arr5[0][i] = lookup(input_arr_4_5_6_7, main_arr[3][i], 5)
         elif veldtype1_nr == 2:
             arr1[0][i] = lookup(input_arr_2, main_arr[3][i], 1)
             arr2[0][i] = lookup(input_arr_2, main_arr[3][i], 2)
             arr3[0][i] = lookup(input_arr_2, main_arr[3][i], 3)
             arr4[0][i] = lookup(input_arr_2, main_arr[3][i], 4)
-            arr4[2][i] = lookup(input_arr_2, main_arr[3][i], 5)
+            arr5[0][i] = lookup(input_arr_2, main_arr[3][i], 5)
 
         if veldtype2_nr == 1 or veldtype2_nr == 3 or veldtype2_nr == 8 or veldtype2_nr == 9:
             arr1[1][i] = lookup(input_arr_1_3_8_9, main_arr[3][i], 1)
             arr2[1][i] = lookup(input_arr_1_3_8_9, main_arr[3][i], 2)
             arr3[1][i] = lookup(input_arr_1_3_8_9, main_arr[3][i], 3)
             arr4[1][i] = lookup(input_arr_1_3_8_9, main_arr[3][i], 4)
-            arr4[0][i] = lookup(input_arr_1_3_8_9, main_arr[3][i], 5)
+            arr5[1][i] = lookup(input_arr_1_3_8_9, main_arr[3][i], 5)
         elif veldtype2_nr == 4 or veldtype2_nr == 5 or veldtype2_nr == 6 or veldtype2_nr == 7:
             arr1[1][i] = lookup(input_arr_4_5_6_7, main_arr[3][i], 1)
             arr2[1][i] = lookup(input_arr_4_5_6_7, main_arr[3][i], 2)
             arr3[1][i] = lookup(input_arr_4_5_6_7, main_arr[3][i], 3)
             arr4[1][i] = lookup(input_arr_4_5_6_7, main_arr[3][i], 4)
-            arr4[0][i] = lookup(input_arr_4_5_6_7, main_arr[3][i], 5)
+            arr5[1][i] = lookup(input_arr_4_5_6_7, main_arr[3][i], 5)
         elif veldtype2_nr == 2:
             arr1[1][i] = lookup(input_arr_2, main_arr[3][i], 1)
             arr2[1][i] = lookup(input_arr_2, main_arr[3][i], 2)
             arr3[1][i] = lookup(input_arr_2, main_arr[3][i], 3)
             arr4[1][i] = lookup(input_arr_2, main_arr[3][i], 4)
-            arr4[2][i] = lookup(input_arr_2, main_arr[3][i], 5)
+            arr5[1][i] = lookup(input_arr_2, main_arr[3][i], 5)
 
         if veldtype3_nr == 1 or veldtype3_nr == 3 or veldtype3_nr == 8 or veldtype3_nr == 9:
             arr1[2][i] = lookup(input_arr_1_3_8_9, main_arr[3][i], 1)
             arr2[2][i] = lookup(input_arr_1_3_8_9, main_arr[3][i], 2)
             arr3[2][i] = lookup(input_arr_1_3_8_9, main_arr[3][i], 3)
             arr4[2][i] = lookup(input_arr_1_3_8_9, main_arr[3][i], 4)
-            arr4[0][i] = lookup(input_arr_1_3_8_9, main_arr[3][i], 5)
+            arr5[2][i] = lookup(input_arr_1_3_8_9, main_arr[3][i], 5)
         elif veldtype3_nr == 4 or veldtype3_nr == 5 or veldtype3_nr == 6 or veldtype3_nr == 7:
             arr1[2][i] = lookup(input_arr_4_5_6_7, main_arr[3][i], 1)
             arr2[2][i] = lookup(input_arr_4_5_6_7, main_arr[3][i], 2)
             arr3[2][i] = lookup(input_arr_4_5_6_7, main_arr[3][i], 3)
             arr4[2][i] = lookup(input_arr_4_5_6_7, main_arr[3][i], 4)
-            arr4[0][i] = lookup(input_arr_4_5_6_7, main_arr[3][i], 5)
+            arr5[2][i] = lookup(input_arr_4_5_6_7, main_arr[3][i], 5)
         elif veldtype3_nr == 2:
             arr1[2][i] = lookup(input_arr_2, main_arr[3][i], 1)
             arr2[2][i] = lookup(input_arr_2, main_arr[3][i], 2)
             arr3[2][i] = lookup(input_arr_2, main_arr[3][i], 3)
             arr4[2][i] = lookup(input_arr_2, main_arr[3][i], 4)
-            arr4[2][i] = lookup(input_arr_2, main_arr[3][i], 5)
+            arr5[2][i] = lookup(input_arr_2, main_arr[3][i], 5)
 
         arr1[3][i] = (arr1[0][i] * (veldtype1_perc / 100)) + (arr1[1][i] * (veldtype2_perc / 100)) + (arr1[2][i] * (veldtype3_perc / 100))
         arr2[3][i] = (arr2[0][i] * (veldtype1_perc / 100)) + (arr2[1][i] * (veldtype2_perc / 100)) + (arr2[2][i] * (veldtype3_perc / 100))
@@ -268,12 +359,12 @@ def rainfall_distr_over_time():
     rain_distr_arr = lrh_database.readfile()
 
     for i in range(21):
-        arr[i][0] = i * 5
+        arr[i][0] = i + 5
         if arr[i][0] == 0:
             arr[i][1] = 0
         else:
             arr[i][1] = round(lookup(rain_distr_arr, TSD, i + 1), 4)
-    
+
     return arr
 
 def muskingum_routing(rdot_arr, dri_arr):
@@ -354,11 +445,13 @@ def muskingum_routing(rdot_arr, dri_arr):
         peakflow_arr[i] = max(temp_arr)
     
     print(peakflow_arr)
-    #print(dri_arr[6][0])
     return arr, peakflow_arr
 
-def excecute():
-    print("METHOD NOT IMPLEMENTED")
+def excecute(catchmentList):
+    ImportCatchmentData(catchmentList[0])
+    dri_arr = FloodRunoffFactorArays(DesignRainfallInformation())
+    rdot_arr = rainfall_distr_over_time()
+    muskingum_routing(rdot_arr, dri_arr)
 
 if __name__ == "__main__":
     #print(DesignRainfallInformation())
