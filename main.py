@@ -49,7 +49,7 @@ def show_methods():
     print("(4) SDF Method -- NOT IMPLEMENTED --")
     print("(5) Empirical Methods -- NOT IMPLEMENTED --")
     print("(6) Synthetic Unit Hydrograph Method -- NOT IMPLEMENTED --")
-    print("(7) Lag-Routed Hydrograph Method -- NOT IMPLEMENTED --")
+    print("(7) Lag-Routed Hydrograph Method")
     print("(8) Probabilisti Methods (AMS) -- NOT IMPLEMENTED --")
     print("(9) Probabilisti Methods (PDS) -- NOT IMPLEMENTED --")
 

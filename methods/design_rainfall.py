@@ -5,7 +5,7 @@ from methods.stationinfo import Stations as si
 import pandas as pd
 
 # --- GLOBAL VARIABLES ---
-path = "/Users/ryanpienaar/VSCode/MEng/methods/Params_20210731.V2.xlsx"
+path = "./Params_20210731.V2.xlsx"
 sheetName = "rainfall_stations"
 userMAP = 0
 gridMAP = 0

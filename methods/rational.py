@@ -823,7 +823,6 @@ def excecute(CatchList):
     # Write data to Excel file
     for i in range(411):
         print(str(i/411*100)+"%")
-        ws.append([str(CatchList[i].Station)])
         ImportCatchmentData(CatchList[i])
         C1 = RuralRunoffCoefficient()
         C2 = UrbanRunoffCoefficients()
@@ -831,14 +830,8 @@ def excecute(CatchList):
         WRC_ARR = WheightedRunoffCoefficients(C1, C2)
         DRI_ARR = DesignRainfallInformation(TC, WRC_ARR)
         PF_ARR = PeakFlow(WRC_ARR, DRI_ARR)
-        ws.append(["C1: " + str(round(C1, precision))])
-        ws.append(["C2: " + str(round(C2, precision))])
-        ws.append(["TC: " + str(round(TC, precision))])
-        for row in WRC_ARR:
-            ws.append([round(val, precision) for val in row])
-        for row in DRI_ARR:
-            ws.append([round(val, precision) for val in row])
-        ws.append([round(val, precision) for val in PF_ARR])
+        combined_data = [str(CatchList[i].Station)] + [round(val, precision) for val in PF_ARR]
+        ws.append(combined_data)
 
     # Save the Excel workbook
     wb.save("rational.xlsx")
