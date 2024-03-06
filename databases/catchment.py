@@ -63,63 +63,71 @@ class Information:
         self.ARF = infolist[51]
 
         #DESIGN RAINFALL
-        self.MAP = infolist[57]
+        self.MAP = infolist[53]
 
         #OVERLAND SURFACE FLOW
         self.OSFManning = infolist[58]
 
         #TIME OF CONCENTRATION
-        self.L = infolist[59]
-        self.TC = infolist[61]
+        #self.L = infolist[59]
+        #self.TC = infolist[61]
 
         #VELD TYPES AND REGIONS
-        self.VTRPerc1 = infolist[64]
-        self.VTRNum1 = infolist[65]
-        self.VTRPerc2 = infolist[66]
-        self.VTRNum2 = infolist[67]
-        self.VTRPerc3 = infolist[68]
-        self.VTRNum3 = infolist[69]
-        self.AvgOverlandSlope = infolist[79]
-        self.OFS = infolist[80]
+        #self.VTRPerc1 = infolist[64]
+        #self.VTRNum1 = infolist[65]
+        #self.VTRPerc2 = infolist[66]
+        #self.VTRNum2 = infolist[67]
+        #self.VTRPerc3 = infolist[68]
+        #self.VTRNum3 = infolist[69]
+        self.AvgOverlandSlope = infolist[99]
+        self.OFS = infolist[30]
 
         #RURAL RUNOFF COEFFICIENTS (C1)
-        self.VleisAndPans = infolist[95]
-        self.FlatAreas = infolist[96]
-        self.Hilly = infolist[97]
-        self.SteepAreas = infolist[98]
+        self.VleisAndPans = infolist[75]
+        self.FlatAreas = infolist[76]
+        self.Hilly = infolist[77]
+        self.SteepAreas = infolist[78]
 
-        self.HydroSoilGroup = infolist[99]
-        self.ThickBushPerc = infolist[100]
-        self.LightBushPerc = infolist[101]
-        self.GrasslandPerc = infolist[102]
-        self.CultivLandContPerc = infolist[103]
-        self.CultivLandPerc = infolist[104]
-        self.NoVegPerc = infolist[105]
-        self.SandyFlatPerc = infolist[106]
-        self.SandySteepPerc = infolist[107]
-        self.HeavySoilFlatPerc = infolist[108]
-        self.HeavySoilSteepPerc = infolist[109]
+        #self.HydroSoilGroup = infolist[99]
+        self.ThickBushPerc = infolist[80]
+        self.LightBushPerc = infolist[81]
+        self.GrasslandPerc = infolist[82]
+        self.CultivLandContPerc = infolist[83]
+        self.CultivLandPerc = infolist[84]
+        self.NoVegPerc = infolist[85]
+        self.SandyFlatPerc = infolist[86]
+        self.SandySteepPerc = infolist[87]
+        self.HeavySoilFlatPerc = infolist[88]
+        self.HeavySoilSteepPerc = infolist[89]
 
         #URBAN RUNOFF
-        self.HousesPerc = infolist[110]
-        self.FlatsPerc = infolist[111]
+        self.HousesPerc = infolist[90]
+        self.FlatsPerc = infolist[91]
 
         #C2 Industry
-        self.LightIndustryPerc = infolist[112]
-        self.AverageIndustryPerc = infolist[113]
-        self.HeavyIndustryPerc = infolist[114]
+        self.LightIndustryPerc = infolist[92]
+        self.AverageIndustryPerc = infolist[93]
+        self.HeavyIndustryPerc = infolist[94]
         #C2 Business
-        self.CityCentrePerc = infolist[115]
-        self.SuburbanPerc = infolist[116]
-        self.StreetsPerc = infolist[117]
-        self.MaxFlood = infolist[118]
+        self.CityCentrePerc = infolist[95]
+        self.SuburbanPerc = infolist[96]
+        self.StreetsPerc = infolist[97]
+        self.MaxFlood = infolist[98]
 
         #JP CALITZ SCS DATA
-        self.SCSMax = infolist[122]
-        self.SCSMin = infolist[123]
-        self.SCSMean = infolist[124]
-        self.SCSMed = infolist[125]
-        self.SCSMode = infolist[126]
+        #self.SCSMax = infolist[122]
+        #self.SCSMin = infolist[123]
+        #self.SCSMean = infolist[124]
+        #self.SCSMed = infolist[125]
+        #self.SCSMode = infolist[126]
+
+        self.A = infolist[54]
+        self.AB = infolist[55]
+        self.B = infolist[56]
+        self.BC = infolist[57]
+        self.C = infolist[58]
+        self.CD = infolist[59]
+        self.D = infolist[60]
 
 
     def test(self):

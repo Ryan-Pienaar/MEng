@@ -251,13 +251,13 @@ def ImportCatchmentData(catch):
     SteepAreas = catch.SteepAreas
 
     # PERMEABILITY VARIABLES
-    A = 0.00
-    AB = 0.00
-    B = 100.0
-    BC = 0.00
-    C = 0.00
-    CD = 0.00
-    D = 0.00
+    A = catch.A
+    AB = catch.AB
+    B = catch.B
+    BC = catch.BC
+    C = catch.C
+    CD = catch.CD
+    D = catch.D
 
     # LAND USE/VEGETATION
     ThickBush_Plantations =catch.ThickBushPerc

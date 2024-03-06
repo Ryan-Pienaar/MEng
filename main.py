@@ -33,7 +33,7 @@ def readfile(path, sheet):
 
     for i in range(411):
         temp_array = list()
-        for j in range(152):
+        for j in range(100):
             temp_array.append(input_array[i][j])
         obj = catchment(temp_array)
         objs.append(obj)
@@ -62,7 +62,7 @@ if __name__ == '__main__':
     print(c_title)
 
     #FilePath = input("Please enter data file location: ")
-    FilePath = "Params_20210731.V2.xlsx"
+    FilePath = "data.xlsx"
 
     #while not exists(FilePath):
      #   FilePath = input("File not found. Please enter correct file name or file path: ")
